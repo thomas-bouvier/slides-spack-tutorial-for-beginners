@@ -3,9 +3,9 @@
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
-background: https://cover.sli.dev
+background: https://cdn.jsdelivr.net/gh/slidevjs/slidev-covers@main/static/tZr3_JuURZA.webp
 # some information about your slides (markdown enabled)
-title: Welcome to Slidev
+title: Spack tutorial
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
@@ -19,7 +19,7 @@ drawings:
 # slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
-mdc: true
+mdc: false
 # open graph
 # seoMeta:
 #  ogImage: https://cover.sli.dev
@@ -34,622 +34,443 @@ Fernando Ayats
 
 ---
 
+<Toc />
+
+
+---
+
 # Spack
 
-https://spack.io
+From https://spack.io:
 
-> Spack is a package manager for supercomputers, Linux, and macOS. It makes installing scientific software easy.
+> Spack is a package manager for **supercomputers**, Linux, and macOS. It makes installing scientific software easy.
+> Spack isn’t tied to a particular language; you can build a software stack in Python or R, link to libraries written in C, C++, or Fortran, and easily swap compilers or target specific microarchitectures.
 
-
----
-
-Presentation slides for developers
-
-<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
+<div class="flex p-10 flex-col items-center">
+  <img src="https://spack.io/assets/images/spack-logo-white.svg" width=150>
 </div>
 
-<div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
-    <carbon:logo-github />
-  </a>
+---
+
+# Why use a package manager?
+
+
+- Manually installing dependencies is a chore
+
+  ```
+  $ git clone --recursive github:project/my-dep && cd my-dep
+  $ cmake -B build && cmake --build build
+  $ ...
+  ```
+
+- We don't expect users to manually install every dependency.
+  - Also, different target systems (Debian, Ubuntu, ...) provide different global dependencies.
+
+---
+
+# Why Spack for HPC?
+
+- Designed specifically for scientific HPC applications
+- Handles different versions and configurations of the same package
+- Supports **multiple compilers** simultaneously
+- Native **MPI** implementation support
+- First-class **CUDA** & GPU software stack integration
+- Reproducible software stacks across different machines
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+```bash
+# Install OpenMPI with GCC
+$ spack install openmpi%gcc
+```
+
+</div>
+<div>
+
+```bash
+# Install same package with Intel compiler
+$ spack install openmpi%intel
+```
+
+</div>
 </div>
 
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
-
----
-transition: fade-out
 ---
 
-# What is Slidev?
+# Basic Spack Commands
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+| Command | Description |
+|---------|-------------|
+| `spack list` | List available packages |
+| `spack info <package>` | Display information about a package |
+| `spack install <package>` | Install a package |
+| `spack find` | List installed packages |
+| `spack uninstall <package>` | Remove an installed package |
+| `spack load <package>` | Load package into environment |
+| `spack graph <package>` | Show dependency graph |
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
-
-Read more about [Why Slidev?](https://sli.dev/guide/why)
-
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
-
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
-
-<!--
-Here is another comment.
--->
-
----
-transition: slide-up
-level: 2
----
-
-# Navigation
-
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
-
-## Keyboard Shortcuts
-
-|                                                     |                             |
-| --------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                       | previous slide              |
-| <kbd>down</kbd>                                     | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
----
-layout: two-cols
-layoutClass: gap-16
----
-
-# Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1" />
+```bash
+# Example: Find all MPI implementations
+$ spack list mpi
 ```
 
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
-
-::right::
-
-<Toc text-sm minDepth="1" maxDepth="2" />
-
----
-layout: image-right
-image: https://cover.sli.dev
 ---
 
-# Code
+# Spack Installation Examples
 
-Use code snippets and get the highlighting directly, and even types hover!
+```bash
+# Install latest OpenMPI
+$ spack install openmpi
 
-```ts {all|5|7|7-8|10|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
+# Install CUDA 11.4.0
+$ spack install cuda@11.4.0
 
-import { computed, ref } from 'vue'
+# Install HDF5 with MPI support
+$ spack install hdf5+mpi
 
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
+# Install NVIDIA HPC SDK with CUDA support
+$ spack install nvhpc+cuda
 ```
 
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
-
----
-level: 2
 ---
 
-# Shiki Magic Move
+# Spack Specs
 
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
+Specs allow you to be specific about what you want to install:
 
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
-
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
+```
+package@version%compiler@version+variant~disabled_variant arch=architecture
 ```
 
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
+Examples for HPC developers:
+
+```bash
+# OpenMPI 4.1.4 with GCC 10.3.0
+$ spack install openmpi@4.1.4%gcc@10.3.0
+
+# CUDA-enabled FFTW using NVHPC compiler
+$ spack install fftw%nvhpc+cuda cuda_arch=80
+
+# HDF5 with parallel I/O built with OpenMPI
+$ spack install hdf5+mpi^openmpi@4.1.4
+```
+
+---
+
+# Spec Syntax - Version Constraints
+
+```bash
+# Exact version
+$ spack install python@3.10.0
+
+# Version range
+$ spack install python@3.7:3.10
+
+# Latest version in range
+$ spack install cuda@11:
+
+# Up to a version
+$ spack install cuda@:11.4
+
+# Specific patch version with wildcard
+$ spack install openmpi@4.1.*
+```
+
+---
+
+# Spec Syntax - Dependencies
+
+Control exactly which dependency versions to use:
+
+```bash
+# HDF5 built with a specific MPI implementation
+$ spack install hdf5+mpi^openmpi@4.1.4
+
+# NAMD with specific CUDA and specific FFTW builds
+$ spack install namd^cuda@11.4^fftw+mpi
+
+# Multiple dependency constraints
+$ spack install trilinos^openmpi@4.1%gcc@10.3.0^hdf5@1.12+mpi
+```
+
+The `^` symbol specifies a dependency constraint.
+
+---
+
+# Exploring Dependencies
+
+View dependency information before installing:
+
+```bash
+# See resolved dependencies without installing
+$ spack spec -I hdf5+mpi
+
+# Visualize dependency graph
+$ spack graph --dot hdf5+mpi | dot -Tpng > hdf5_deps.png
+```
+
+<div class="flex justify-center">
+  <div class="p-2 bg-slate-100 dark:bg-slate-800 rounded">
+    <pre>hdf5@1.12.2%gcc@10.3.0+mpi
+    └─ openmpi@4.1.4%gcc@10.3.0
+        ├─ hwloc@2.8.0%gcc@10.3.0
+        │   └─ libpciaccess@0.16%gcc@10.3.0
+        └─ openssh@9.0p1%gcc@10.3.0</pre>
+  </div>
+</div>
+
+---
+
+# Spack Environments
+
+Environments help manage collections of packages:
+
+```bash
+# Create a new environment
+$ spack env create myproject
+
+# Activate the environment
+$ spack env activate myproject
+
+# Add packages to the environment
+(myproject) $ spack add openmpi cuda hdf5+mpi
+
+# Install everything in the environment
+(myproject) $ spack install
+
+# Deactivate when done
+(myproject) $ spack env deactivate
+```
+
+---
+
+# Environment Files (spack.yaml)
+
+Create reproducible environments with a YAML file:
+
+```yaml
+# Example spack.yaml for MPI+CUDA application
+spack:
+  specs:
+  - openmpi@4.1.4
+  - cuda@11.4.0
+  - hdf5+mpi
+  - fftw+mpi+cuda
+  concretizer:
+    unify: true
+  view: true
+```
+
+```bash
+# Create and install from file
+$ spack env create cuda-mpi-env spack.yaml
+$ spack env activate cuda-mpi-env
+$ spack install
+```
+
+---
+
+# Compiler Configuration
+
+View available compilers:
+
+```bash
+$ spack compilers
+==> Available compilers
+-- gcc centos7-x86_64 ------------------------------
+gcc@10.3.0  gcc@8.5.0
+
+-- intel centos7-x86_64 -----------------------------
+intel@19.0.4
+```
+
+Add a new compiler:
+
+```bash
+# Auto-detect compilers
+$ spack compiler find
+
+# Add compiler manually
+$ spack compiler add /path/to/custom/compiler
+```
+
+---
+
+# Compiler Configuration File
+
+Manual configuration in `~/.spack/linux/compilers.yaml`:
+
+```yaml
+compilers:
+- compiler:
+    spec: gcc@10.3.0
+    paths:
+      cc: /opt/gcc/10.3.0/bin/gcc
+      cxx: /opt/gcc/10.3.0/bin/g++
+      f77: /opt/gcc/10.3.0/bin/gfortran
+      fc: /opt/gcc/10.3.0/bin/gfortran
+    flags:
+      cflags: -O3
+      cxxflags: -O3
+    operating_system: centos7
+    target: x86_64
+```
+
+---
+
+# Package Flags and Options
+
+Customize compiler flags for specific packages:
+
+```yaml
+# ~/.spack/packages.yaml
+packages:
+  openmpi:
+    compiler: [gcc@10.3.0]
+    variants: +thread_multiple fabrics=ofi,ucx
+  all:
+    compiler: [gcc, intel, nvhpc]
+    providers:
+      mpi: [openmpi, mpich, intel-mpi]
+      blas: [openblas, intel-mkl]
+```
+
+```bash
+# Install with specific flags
+$ spack install hdf5 cflags="-O3 -ffast-math" cxxflags="-O3"
+```
+
+---
+
+# Writing a Package Definition
+
+Basic structure of a package definition (`package.py`):
+
+```python
+from spack import *
+
+class MyPackage(CMakePackage):
+    """Description of the package"""
+
+    homepage = "https://example.com/mypackage"
+    url      = "https://example.com/mypackage-1.0.tar.gz"
+
+    version('1.0', sha256='abc123...')
+
+    variant('mpi', default=True, description='Build with MPI support')
+    variant('cuda', default=False, description='Build with CUDA support')
+
+    depends_on('mpi', when='+mpi')
+    depends_on('cuda', when='+cuda')
+
+    def cmake_args(self):
+        args = []
+        if '+mpi' in self.spec:
+            args.append('-DUSE_MPI=ON')
+        if '+cuda' in self.spec:
+            args.append('-DUSE_CUDA=ON')
+        return args
+```
+
+---
+
+# Package Definition - Build Systems
+
+Spack supports multiple build systems through base classes:
+
+- `CMakePackage`: for CMake-based packages
+- `AutotoolsPackage`: for autotools-based packages
+- `PythonPackage`: for Python packages
+- `MakefilePackage`: for Makefile-based projects
+- `CudaPackage`: helper for CUDA packages
+
+```python
+# Example for MPI library using Autotools
+class MyMpiLib(AutotoolsPackage):
+    def configure_args(self):
+        args = ['--enable-shared']
+        if '+cuda' in self.spec:
+            args.append('--with-cuda={0}'.format(self.spec['cuda'].prefix))
+        return args
+```
+
+---
+
+# MPI-specific Package Example
+
+```python
+class MpiApplication(CMakePackage, CudaPackage):
+    """Example MPI application with CUDA support"""
+
+    depends_on('mpi')
+    depends_on('cuda@11:', when='+cuda')
+    depends_on('hdf5+mpi')
+
+    def cmake_args(self):
+        args = [
+            self.define('MPI_HOME', self.spec['mpi'].prefix),
+            self.define('HDF5_ROOT', self.spec['hdf5'].prefix)
         ]
-      }
-    }
-  }
-}
-```
 
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
-}
-```
+        if '+cuda' in self.spec:
+            args.extend([
+                self.define('ENABLE_CUDA', True),
+                self.define('CMAKE_CUDA_ARCHITECTURES', self.cuda_arch_list())
+            ])
 
-Non-code blocks are ignored.
-
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
+        return args
 ```
-````
 
 ---
 
-# Components
+# Testing Your Package
 
-<div grid="~ cols-2 gap-4">
-<div>
+Add tests to verify correct installation:
 
-You can use Vue components directly inside your slides.
+```python
+class MyMpiApp(CMakePackage):
+    # ... other package definitions ...
 
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
+    # Add test that runs after installation
+    @run_after('install')
+    @on_package_attributes(run_tests=True)
+    def test_install(self):
+        test_exe = join_path(self.prefix.bin, 'myapp_test')
+        self.run_test(test_exe, options=['--simple-test'],
+                     expected=['Test passed'])
 
-```html
-<Counter :count="10" />
+        # MPI test with 4 ranks
+        mpiexe = self.spec['mpi'].prefix.bin.mpirun
+        self.run_test(mpiexe, options=['-n', '4', test_exe, '--mpi-test'],
+                     expected=['MPI test passed'])
 ```
 
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
+To run tests during installation: `spack install --test=root myapp`
 
 ---
 
-# Clicks Animations
+# Spack Resources
 
-You can add `v-click` to elements to add a click animation.
+- [Official Documentation](https://spack.readthedocs.io/)
+- [Spack GitHub Repository](https://github.com/spack/spack)
+- [Spack Tutorial](https://spack-tutorial.readthedocs.io/)
+- [Spack Slack Channel](https://spackpm.slack.com/)
 
-<div v-click>
-
-This shows up when you click the slide:
-
-```html
-<div v-click>This shows up when you click the slide.</div>
-```
-
-</div>
-
-<br>
-
-<v-click>
-
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div mt-20 v-click>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
+<div class="flex justify-center">
+  <img src="https://spack.io/assets/images/spack-logo.svg" width="200">
 </div>
 
 ---
 
-# Motions
+# Questions?
 
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
-```
-
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
+<div class="flex h-full items-center justify-center">
+  <div class="text-center">
+    <h2 class="text-3xl font-bold mb-10">Thank you!</h2>
+    <p class="text-xl">Fernando Ayats</p>
+    <p>NumPEx WP3 / WP4</p>
   </div>
 </div>
 
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
 
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn more](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
-
-<div h-3 />
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
-
-[Learn more](https://sli.dev/features/latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <div class="i-carbon:arrow-up" />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="663,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
-
----
-
-# Monaco Editor
-
-Slidev provides built-in Monaco Editor support.
-
-Add `{monaco}` to the code block to turn it into an editor:
-
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
-
-const arr = ref(emptyArray(10))
-```
-
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
-
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
-
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
-```
-
----
-layout: center
-class: text-center
----
-
-# Learn More
-
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
-
-<PoweredBySlidev mt-10 />
