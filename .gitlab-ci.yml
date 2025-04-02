@@ -1,6 +1,6 @@
 default:
   tags:
-   - 'small'
+   - 'large'
 
 stages:
   - publish
