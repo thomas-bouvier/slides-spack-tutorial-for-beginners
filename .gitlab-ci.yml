@@ -16,7 +16,8 @@ pages:
     - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install
-    - pnpm build
+    - pnpm build --base /spack-tutorial/ --out public
+
   artifacts:
     paths:
-      - dist
+      - public
