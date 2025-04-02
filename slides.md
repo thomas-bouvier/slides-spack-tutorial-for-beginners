@@ -25,7 +25,23 @@ mdc: true
 #  ogImage: https://cover.sli.dev
 ---
 
-# Welcome to Slidev
+# Spack Tutorial
+
+## NumPEx WP3 / WP4
+
+
+Fernando Ayats
+
+---
+
+# Spack
+
+https://spack.io
+
+> Spack is a package manager for supercomputers, Linux, and macOS. It makes installing scientific software easy.
+
+
+---
 
 Presentation slides for developers
 

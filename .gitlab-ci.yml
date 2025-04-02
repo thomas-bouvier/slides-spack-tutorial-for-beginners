@@ -1,0 +1,21 @@
+default:
+  tags:
+   - 'small'
+
+stages:
+  - pages
+
+pages:
+  stage: publish
+  pages: true
+  before_script:
+    - npm install --global corepack@latest
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
+    - pnpm config set store-dir .pnpm-store
+  script:
+    - pnpm install
+    - pnpm build
+  artifacts:
+    paths:
+      - dist
