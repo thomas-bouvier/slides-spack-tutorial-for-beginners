@@ -7,6 +7,7 @@ stages:
 
 pages:
   stage: publish
+  image: node:latest
   pages: true
   before_script:
     - npm install --global corepack@latest
