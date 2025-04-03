@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@_viper/iosevka':
+        specifier: ^1.5.4
+        version: 1.5.4
       '@slidev/cli':
         specifier: ^51.5.0
         version: 51.5.0(@babel/parser@7.27.0)(@nuxt/kit@3.16.2)(@types/markdown-it@14.1.2)(@types/node@18.19.85)(@vue/compiler-sfc@3.5.13)(markdown-it-async@2.2.0)(postcss@8.5.3)
@@ -22,6 +25,9 @@ importers:
         version: 3.5.13(typescript@5.8.2)
 
 packages:
+
+  '@_viper/iosevka@1.5.4':
+    resolution: {integrity: sha512-9F7uOS9nJ0SkG+J35KG43MZQhi6aK8mbHMQduzSDeTSIs5+B9BdIqzu+S4nz30bOnUIMkNwnX+1nuCYWuyhv0g==}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -2676,6 +2682,8 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
+
+  '@_viper/iosevka@1.5.4': {}
 
   '@ampproject/remapping@2.3.0':
     dependencies:

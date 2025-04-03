@@ -23,6 +23,11 @@ mdc: false
 # open graph
 # seoMeta:
 #  ogImage: https://cover.sli.dev
+fonts:
+  mono: iosevka-normal
+  local: iosevka-normal
+
+hideInToc: true
 ---
 
 # Spack Tutorial
@@ -39,7 +44,7 @@ Fernando Ayats
 
 ---
 
-# Spack
+# The Spack Package Manager
 
 From https://spack.io:
 
@@ -77,43 +82,105 @@ From https://spack.io:
 - First-class **CUDA** & GPU software stack integration
 - Reproducible software stacks across different machines
 
-<div class="grid grid-cols-2 gap-4">
-<div>
+---
 
+# Installing Spack
+
+Spack is a regular Python project from GitHub, just clone it:
+
+````md magic-move
 ```bash
-# Install OpenMPI with GCC
-$ spack install openmpi%gcc
+# Clone Spack
+$ git clone https://github.com/spack/spack
 ```
 
-</div>
-<div>
-
 ```bash
-# Install same package with Intel compiler
-$ spack install openmpi%intel
+# Clone Spack
+$ git clone https://github.com/spack/spack
+
+# Activate Spack
+$ . spack/share/spack/setup-env.sh
+# If you use fish: source spack/share/spack/setup-env.fish
 ```
 
+```bash
+# Clone Spack
+$ git clone https://github.com/spack/spack
+
+# Activate Spack
+$ . spack/share/spack/setup-env.sh
+# If you use fish: source spack/share/spack/setup-env.fish
+
+$ spack --version
+1.0.0.dev0 (199133fca402022a27002a54f25d735e7a27cce5)
+```
+````
+
+<div v-click>
+
+  The Spack executable and the versions for all packages are **self-contained** in the Spack folder.
+
 </div>
-</div>
+
 
 ---
 
-# Basic Spack Commands
+# Some Spack Commands
 
 | Command | Description |
 |---------|-------------|
-| `spack list` | List available packages |
+| `spack list` | List **available** packages |
+| `spack find` | List **installed** packages |
 | `spack info <package>` | Display information about a package |
-| `spack install <package>` | Install a package |
-| `spack find` | List installed packages |
-| `spack uninstall <package>` | Remove an installed package |
-| `spack load <package>` | Load package into environment |
-| `spack graph <package>` | Show dependency graph |
+| `spack env` | Manage **environments** |
+| `spack install` | Install packages |
+| `spack spec` | Display the dependency graph for a package |
 
 ```bash
 # Example: Find all MPI implementations
 $ spack list mpi
 ```
+
+---
+
+## Package specs
+
+```{1,3}
+$ spack spec kokkos
+
+ -   kokkos@4.5.01~aggressive_vectorization~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none arch=linux-debian11-x86_64
+ -       ^cmake@3.31.6~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release arch=linux-debian11-x86_64
+ -           ^curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl arch=linux-debian11-x86_64
+ -               ^nghttp2@1.65.0 build_system=autotools arch=linux-debian11-x86_64
+ -                   ^diffutils@3.10 build_system=autotools arch=linux-debian11-x86_64
+ -                       ^libiconv@1.17 build_system=autotools libs=shared,static arch=linux-debian11-x86_64
+```
+
+
+
+Instead of package names, Spack uses **package specs**:
+
+<code>
+kokkos <span class="color-green">@4.5.01</span> <span class="color-purple">~aggressive_vectorization</span> ...
+</code>
+
+---
+
+Spec documentation: https://spack.readthedocs.io/en/latest/basic_usage.html#specs-dependencies
+
+- <code>kokkos</code>: Package name
+- <code class="color-green">@4.5.01</code>: [Version specifier](https://spack.readthedocs.io/en/latest/basic_usage.html#version-specifier).
+  - Spack concretizes packages to a fixed version <code class="color-green">@X.Y.Z</code>.
+  - As a user, you can specify a version range, e.g:
+    - <code class="color-green">@4.5:</code>: Take <code class="color-green">@4.5.0</code>, <code class="color-green">@4.5.1</code>, etc.
+- <code class="color-purple">~aggressive_vectorization</code>: Variant specifier.
+  - <code class="color-purple">+</code> means the feature is enabled.
+  - <code class="color-purple">~</code> (or <code class="color-purple">-</code>) means the feature is disabled.
+  - Variants can also be <code class="color-purple">name=value</code> pairs.
+- <code class="color-blue">target=x86_64</code>: Target specifier.
+  - Similar to variants, but present in all packages.
+  - Allows you to target some compiler microarhitecture, e.g. <code class="color-blue">target=haswell</code>
+
 
 ---
 
@@ -132,6 +199,8 @@ $ spack install hdf5+mpi
 # Install NVIDIA HPC SDK with CUDA support
 $ spack install nvhpc+cuda
 ```
+
+
 
 ---
 
@@ -472,5 +541,3 @@ To run tests during installation: `spack install --test=root myapp`
     <p>NumPEx WP3 / WP4</p>
   </div>
 </div>
-
-
