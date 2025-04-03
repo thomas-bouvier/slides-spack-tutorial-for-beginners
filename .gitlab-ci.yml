@@ -16,7 +16,7 @@ pages:
     - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install
-    - pnpm build --base /spack-tutorial/ --out public
+    - pnpm build --base /wp3/spack-tutorial/ --out public
 
   artifacts:
     paths:
