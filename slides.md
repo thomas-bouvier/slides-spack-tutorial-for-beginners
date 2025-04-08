@@ -194,20 +194,20 @@ These are some of the key insights to understand how Spack works:
 
 To install Spack, we must clone the repo
 
-```bash
-# Clone Spack
+```ansi
+[0;90m# Clone Spack[0m
 $ git clone https://github.com/spack/spack
 
-# Filter to get less files (310M -> 194M), and optimize for slow disks
+[0;90m# Filter to get less files (310M -> 194M), and optimize for slow disks[0m
 $ git clone -c feature.manyFiles=true --filter=blob:none https://github.com/spack/spack
 ```
 
 <v-click>
 
-```bash
-# Activate Spack
+```ansi
+[0;90m# Activate Spack[0m
 $ . spack/share/spack/setup-env.sh
-# If you use fish: source spack/share/spack/setup-env.fish
+[0;90m# If you use fish: source spack/share/spack/setup-env.fish[0m
 ```
 
 </v-click>
@@ -215,7 +215,7 @@ $ . spack/share/spack/setup-env.sh
 
 <v-click>
 
-```bash
+```
 $ spack --version
 1.0.0.dev0 (199133fca402022a27002a54f25d735e7a27cce5)
 ```
@@ -243,26 +243,26 @@ The Spack executable and the versions for all packages are **self-contained** in
 
 ## Finding a package
 
-```
+```ansi
 $ spack list kokkos
 hpx-kokkos  kokkos  kokkos-kernels  kokkos-kernels-legacy  kokkos-legacy  kokkos-nvcc-wrapper  kokkos-tools  py-pennylane-lightning-kokkos  py-pykokkos-base
-==> 9 packages
+[1;34m==>[0m 9 packages
 ```
 
 <v-click>
 
-```
+```ansi
 $ spack info kokkos
-CMakePackage:   kokkos
+[1;34mCMakePackage:   [0mkokkos
 
-Description:
+[1;34mDescription:[0m
     Kokkos implements a programming model in C++ for writing performance
     portable applications targeting all major HPC platforms.
 
-Homepage: https://github.com/kokkos/kokkos
+[1;34mHomepage: [0mhttps://github.com/kokkos/kokkos
 
-Preferred version:
-    4.5.01     https://github.com/kokkos/kokkos/releases/download/4.5.01/kokkos-4.5.01.tar.gz
+[1;34mPreferred version:  [0m
+[0;36m    4.5.01     [0mhttps://github.com/kokkos/kokkos/releases/download/4.5.01/kokkos-4.5.01.tar.gz
 ```
 
 </v-click>
@@ -272,15 +272,16 @@ Preferred version:
 
 ## Package specs
 
-```{1,3}
+```ansi{1,2}
 $ spack spec kokkos
-
- -   kokkos@4.5.01~aggressive_vectorization~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none arch=linux-debian11-x86_64
- -       ^cmake@3.31.6~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release arch=linux-debian11-x86_64
- -           ^curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl arch=linux-debian11-x86_64
- -               ^nghttp2@1.65.0 build_system=autotools arch=linux-debian11-x86_64
- -                   ^diffutils@3.10 build_system=autotools arch=linux-debian11-x86_64
- -                       ^libiconv@1.17 build_system=autotools libs=shared,static arch=linux-debian11-x86_64
+[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^nghttp2[0;36m@1.65.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                  ^diffutils[0;36m@3.10[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^openssl[0;36m@3.4.1[0m[0;94m~docs+shared build_system=generic certs=mozilla[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                  ^ca-certificates-mozilla[0;36m@2025-02-25[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+...
 ```
 
 
@@ -310,20 +311,21 @@ Spec documentation: https://spack.readthedocs.io/en/latest/basic_usage.html#spec
 
 ---
 
-```{1,6}
-$ spack spec -U kokkos +cuda cuda_arch=120
- -   kokkos@4.5.01~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none arch=linux-ubuntu24.04-icelake
- -       ^cmake@3.31.6~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release arch=linux-ubuntu24.04-icelake
-    ...
- -       ^compiler-wrapper@1.0 build_system=generic arch=linux-ubuntu24.04-icelake
- -       ^cuda@12.8.0~allow-unsupported-compilers~dev build_system=generic arch=linux-ubuntu24.04-icelake
- -           ^libxml2@2.13.5~http+pic~python+shared build_system=autotools arch=linux-ubuntu24.04-icelake
- -               ^libiconv@1.17 build_system=autotools libs=shared,static arch=linux-ubuntu24.04-icelake
- -               ^xz@5.6.3~pic build_system=autotools libs=shared,static arch=linux-ubuntu24.04-icelake
-[e]      ^gcc@13.3.0~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran' arch=linux-ubuntu24.04-icelake
- -       ^gcc-runtime@13.3.0 build_system=generic arch=linux-ubuntu24.04-icelake
-[e]      ^glibc@2.39 build_system=autotools arch=linux-ubuntu24.04-icelake
- -       ^gmake@4.4.1~guile build_system=generic arch=linux-ubuntu24.04-icelake
+```ansi{1,2,9}
+$ spack spec kokkos +cuda cuda_arch=120
+[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+...
+[0;32m[+][0m          ^ncurses[0;36m@6.5[0m[0;94m~symlinks+termlib abi=none build_system=autotools patches=7a351bc[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;90m - [0m      ^cuda[0;36m@12.8.0[0m[0;94m~allow-unsupported-compilers~dev build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^libxml2[0;36m@2.13.5[0m[0;94m~http+pic~python+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^libiconv[0;36m@1.17[0m[0;94m build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^xz[0;36m@5.6.3[0m[0;94m~pic build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[e][0m      ^gcc[0;36m@13.3.0[0m[0;94m~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran'[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+...
 ```
 
 Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture.
@@ -367,10 +369,10 @@ An environment is used to group a set of specs intended for some purpose to be b
 
 <br/>
 
-```
-$ spack env create --dir ~/myenv
-==> Created independent environment in: ~/myenv
-==> Activate with: spack env activate ~/myenv
+```ansi
+$ spack env create --dir /tmp	/test
+[1;34m==>[0m Created independent environment in: [0;36m/tmp/test[0m
+[1;34m==>[0m Activate with: [0;36mspack env activate /tmp/test[0m
 
 $ spack env activate ~/myenv
 ```
@@ -401,9 +403,9 @@ To add packages to the environment, we have 2 options:
 - Manually edit the `spack.yaml` file.
 - Call `spack add <spec>`, which will edit the environment for us.
 
-```
+```ansi
 $ spack add kokkos
-==> Adding kokkos to environment ~/myenv
+[1;34m==>[0m Package kokkos was already added to /home/ubuntu/myenv
 ```
 
 <br/>
@@ -418,88 +420,6 @@ spack:
 ```
 
 
----
-
-# Spack Installation Examples
-
-```bash
-# Install latest OpenMPI
-$ spack install openmpi
-
-# Install CUDA 11.4.0
-$ spack install cuda@11.4.0
-
-# Install HDF5 with MPI support
-$ spack install hdf5+mpi
-
-# Install NVIDIA HPC SDK with CUDA support
-$ spack install nvhpc+cuda
-```
-
-
-
----
-
-# Spack Specs
-
-Specs allow you to be specific about what you want to install:
-
-```
-package@version%compiler@version+variant~disabled_variant arch=architecture
-```
-
-Examples for HPC developers:
-
-```bash
-# OpenMPI 4.1.4 with GCC 10.3.0
-$ spack install openmpi@4.1.4%gcc@10.3.0
-
-# CUDA-enabled FFTW using NVHPC compiler
-$ spack install fftw%nvhpc+cuda cuda_arch=80
-
-# HDF5 with parallel I/O built with OpenMPI
-$ spack install hdf5+mpi^openmpi@4.1.4
-```
-
----
-
-# Spec Syntax - Version Constraints
-
-```bash
-# Exact version
-$ spack install python@3.10.0
-
-# Version range
-$ spack install python@3.7:3.10
-
-# Latest version in range
-$ spack install cuda@11:
-
-# Up to a version
-$ spack install cuda@:11.4
-
-# Specific patch version with wildcard
-$ spack install openmpi@4.1.*
-```
-
----
-
-# Spec Syntax - Dependencies
-
-Control exactly which dependency versions to use:
-
-```bash
-# HDF5 built with a specific MPI implementation
-$ spack install hdf5+mpi^openmpi@4.1.4
-
-# NAMD with specific CUDA and specific FFTW builds
-$ spack install namd^cuda@11.4^fftw+mpi
-
-# Multiple dependency constraints
-$ spack install trilinos^openmpi@4.1%gcc@10.3.0^hdf5@1.12+mpi
-```
-
-The `^` symbol specifies a dependency constraint.
 
 ---
 
