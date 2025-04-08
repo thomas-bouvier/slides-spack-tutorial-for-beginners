@@ -405,7 +405,7 @@ To add packages to the environment, we have 2 options:
 
 ```ansi
 $ spack add kokkos
-[1;34m==>[0m Package kokkos was already added to /home/ubuntu/myenv
+[1;34m==>[0m Adding kokkos to environment /home/ubuntu/myenv
 ```
 
 <br/>
@@ -419,6 +419,33 @@ spack:
     unify: true
 ```
 
+---
+
+## Environment concretization
+
+<br/>
+
+<div class="w-full flex flex-row justify-center">
+
+```mermaid {scale: 1.0}
+flowchart LR
+  A[spack add] --> B[spack concretize] --> C[spack install]
+```
+
+</div>
+
+Concretization checks the system environment and the requested versions of the
+packages to calculate the graph of dependencies.
+
+This will generate a `spack.lock` file that should be committed alongside the `spack.yaml`. It
+will lock every version of every package in place.
+
+```ansi
+$ spack concretize
+
+[0;90m# To force concretization and ignore existing packages[0m
+$ spack concretize -Uf
+```
 
 
 ---
@@ -697,3 +724,5 @@ To run tests during installation: `spack install --test=root myapp`
     <p>NumPEx WP3 / WP4</p>
   </div>
 </div>
+
+---
