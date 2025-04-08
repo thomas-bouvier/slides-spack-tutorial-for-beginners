@@ -227,7 +227,7 @@ The Spack executable and the versions for all packages are **self-contained** in
 
 ---
 
-## Some Spack Commands
+## Some Spack commands
 
 | Command | Description |
 |---------|-------------|
@@ -238,12 +238,37 @@ The Spack executable and the versions for all packages are **self-contained** in
 | `spack install` | Install packages |
 | `spack spec` | Display the dependency graph for a package |
 
-```bash
-# Example: Find all MPI implementations
-$ spack list mpi
-```
 
 ---
+
+## Finding a package
+
+```
+$ spack list kokkos
+hpx-kokkos  kokkos  kokkos-kernels  kokkos-kernels-legacy  kokkos-legacy  kokkos-nvcc-wrapper  kokkos-tools  py-pennylane-lightning-kokkos  py-pykokkos-base
+==> 9 packages
+```
+
+<v-click>
+
+```
+$ spack info kokkos
+CMakePackage:   kokkos
+
+Description:
+    Kokkos implements a programming model in C++ for writing performance
+    portable applications targeting all major HPC platforms.
+
+Homepage: https://github.com/kokkos/kokkos
+
+Preferred version:
+    4.5.01     https://github.com/kokkos/kokkos/releases/download/4.5.01/kokkos-4.5.01.tar.gz
+```
+
+</v-click>
+
+---
+
 
 ## Package specs
 
@@ -282,6 +307,115 @@ Spec documentation: https://spack.readthedocs.io/en/latest/basic_usage.html#spec
 - <code class="color-blue">target=x86_64</code>: Target specifier.
   - Similar to variants, but present in all packages.
   - Allows you to target some compiler microarhitecture, e.g. <code class="color-blue">target=haswell</code>
+
+---
+
+```{1,6}
+$ spack spec -U kokkos +cuda cuda_arch=120
+ -   kokkos@4.5.01~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none arch=linux-ubuntu24.04-icelake
+ -       ^cmake@3.31.6~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release arch=linux-ubuntu24.04-icelake
+    ...
+ -       ^compiler-wrapper@1.0 build_system=generic arch=linux-ubuntu24.04-icelake
+ -       ^cuda@12.8.0~allow-unsupported-compilers~dev build_system=generic arch=linux-ubuntu24.04-icelake
+ -           ^libxml2@2.13.5~http+pic~python+shared build_system=autotools arch=linux-ubuntu24.04-icelake
+ -               ^libiconv@1.17 build_system=autotools libs=shared,static arch=linux-ubuntu24.04-icelake
+ -               ^xz@5.6.3~pic build_system=autotools libs=shared,static arch=linux-ubuntu24.04-icelake
+[e]      ^gcc@13.3.0~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran' arch=linux-ubuntu24.04-icelake
+ -       ^gcc-runtime@13.3.0 build_system=generic arch=linux-ubuntu24.04-icelake
+[e]      ^glibc@2.39 build_system=autotools arch=linux-ubuntu24.04-icelake
+ -       ^gmake@4.4.1~guile build_system=generic arch=linux-ubuntu24.04-icelake
+```
+
+Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture.
+
+---
+
+## Package installation
+
+So, we're going to install Kokkos and some other packages, how do we do it?
+
+```
+$ spack install kokkos
+...
+```
+
+<v-click>
+
+...but let's use <span v-mark.red="1">environments</span> instead!
+
+
+- 📦 Declarative -- run a single install command for everything.
+- 👥 Shareable -- share the environment file with your colleagues.
+- 🔒 Isolated -- environments won't conflict between each other.
+
+</v-click>
+
+---
+
+## Spack environments
+
+From the [official documentation](https://spack.readthedocs.io/en/latest/environments.html):
+
+<blockquote>
+
+An environment is used to group a set of specs intended for some purpose to be built, rebuilt, and deployed in a coherent fashion. Environments define aspects of the installation of the software, such as:
+  - which specs to install;
+  - how those specs are configured; and
+  - where the concretized software will be installed.
+
+</blockquote>
+
+<br/>
+
+```
+$ spack env create --dir ~/myenv
+==> Created independent environment in: ~/myenv
+==> Activate with: spack env activate ~/myenv
+
+$ spack env activate ~/myenv
+```
+
+---
+
+The generated environment will look like the following:
+
+```yaml
+# ~/myenv/spack.yaml
+spack:
+  specs: []
+  view: true
+  concretizer:
+    unify: true
+```
+
+- <span v-mark.red="-1"><code>specs</code>: List of packages to install.</span>
+
+Less importantly:
+- `view`: Whether the packages are exposed to the user.
+- `concretizer:unify`: Run a single pass of the "concretizer" (more on that later).
+
+---
+
+To add packages to the environment, we have 2 options:
+
+- Manually edit the `spack.yaml` file.
+- Call `spack add <spec>`, which will edit the environment for us.
+
+```
+$ spack add kokkos
+==> Adding kokkos to environment ~/myenv
+```
+
+<br/>
+
+```yaml
+spack:
+  specs:
+  - kokkos
+  view: true
+  concretizer:
+    unify: true
+```
 
 
 ---

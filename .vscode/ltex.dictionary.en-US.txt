@@ -1,3 +1,5 @@
 Spack
 CUDA
 cuda
+Kokkos
+concretizer
