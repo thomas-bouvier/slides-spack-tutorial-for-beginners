@@ -42,7 +42,14 @@ Fernando Ayats
 
 ---
 
-<Toc />
+<Toc maxDepth="1" />
+
+---
+layout: center
+---
+
+# Why package managers, and why Spack
+
 
 ---
 
@@ -170,6 +177,12 @@ From https://spack.io:
 > Spack is a package manager for **supercomputers**, Linux, and macOS. It makes installing scientific software easy.
 > Spack isn’t tied to a particular language; you can build a software stack in Python or R, link to libraries written in C, C++, or Fortran, and easily swap compilers or target specific microarchitectures.
 
+---
+hideInToc: true
+layout: center
+---
+
+# Getting started with Spack
 
 ---
 
@@ -177,20 +190,17 @@ From https://spack.io:
 
 These are some of the key insights to understand how Spack works:
 
-- 📦 Spack is installed by cloning the [github.com/spack/spack repository](https:://github.com/spack/spack). You can have multiple Spack installations.
-- ✅ Spack must be **activated** to be able to run its commands.
-- ⚙️ It has commands for what you expect from a package manager: install, uninstall, find, etc.
-- 📌 The versions for the packages are the ones included in your Spack clone, there is no "sync or update" step.
-- 🤝 Spack integrates the packages available in the system (externals), with the ones coming from Spack itself.
-- 🎛️ Packages **specs**, may have switchable options, for example to enable CUDA support with <code class="color-purple">+cuda</code>.
-- 🌍 Spack **environments** allow you to install packages globally.
+- 📦 Install Spack by cloning the [repo](https:://github.com/spack/spack). Multiple installations allowed.
+- ✅ Activate Spack to run commands.
+- ⚙️ Commands: install, uninstall, find, etc.
+- 📌 Package versions are fixed in your Spack clone.
+- 🤝 Integrates system packages with Spack packages.
+- 🎛️ Package specs allow options like <code class="color-purple">+cuda</code>.
+- 🌍 Environments enable global package installations.
 
 
 ---
 
-# Getting started with Spack
-
-<span/>
 
 To install Spack, we must clone the repo
 
@@ -378,6 +388,8 @@ $ spack env activate ~/myenv
 ```
 
 ---
+hideInToc: true
+---
 
 The generated environment will look like the following:
 
@@ -539,11 +551,56 @@ $ spack install
 [1;34m==>[0m Updating view at /home/ubuntu/myenv/.spack-env/view
 ```
 
+<div class="second">
+
+```ansi
+$ spack spec
+[0;32m[+][0m  cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^nghttp2[0;36m@1.65.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^diffutils[0;36m@3.10[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                  ^libiconv[0;36m@1.17[0m[0;94m build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^openssl[0;36m@3.4.1[0m[0;94m~docs+shared build_system=generic certs=mozilla[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^ca-certificates-mozilla[0;36m@2025-02-25[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^perl[0;36m@5.40.0[0m[0;94m+cpanm+opcode+open+shared+threads build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                  ^berkeley-db[0;36m@18.1.40[0m[0;94m+cxx~docs+stl build_system=autotools patches=26090f4,b231fcc[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                  ^bzip2[0;36m@1.0.8[0m[0;94m~debug~pic+shared build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                  ^gdbm[0;36m@1.23[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m                      ^readline[0;36m@8.2[0m[0;94m build_system=autotools patches=1ea4349,24f587b,3d9885e,5911a5b,622ba38,6c8adf8,758e2ec,79572ee,a177edc,bbf97f1,c7b45ff,e0013d9,e065038[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^pkgconf[0;36m@2.3.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[e][0m      ^gcc[0;36m@13.3.0[0m[0;94m~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran'[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^gcc-runtime[0;36m@13.3.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[e][0m      ^glibc[0;36m@2.39[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^gmake[0;36m@4.4.1[0m[0;94m~guile build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^ncurses[0;36m@6.5[0m[0;94m~symlinks+termlib abi=none build_system=autotools patches=7a351bc[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+```
+
+</div>
+
+<style>
+.second pre  {
+  max-height: 200px;
+}
+</style>
 
 
 
+---
+layout: center
+---
+
+# Compiler configuration
 
 
+
+---
+layout: center
+---
+
+# Writing a package definition
 
 
 
