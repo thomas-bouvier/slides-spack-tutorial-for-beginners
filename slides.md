@@ -447,6 +447,121 @@ $ spack concretize
 $ spack concretize -Uf
 ```
 
+---
+
+`spack concretize` will generate the `spack.lock` alongside your `spack.yaml`.
+If skip the concretization step, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
+
+**Important**: you should always commit your lockfiles.
+
+
+```json
+// spack.lock
+{
+  "_meta": {
+    "file-type": "spack-lockfile",
+    "lockfile-version": 6,
+    "specfile-version": 5
+  },
+  "spack": {
+    "version": "1.0.0.dev0",
+    "type": "git",
+    "commit": "199133fca402022a27002a54f25d735e7a27cce5"
+  },
+  "roots": [
+    {
+      "hash": "ylsnhrukizj6kfprn5rbawyaophnkwgw",
+      "spec": "kokkos"
+    }
+  ],
+  "concrete_specs": {
+    "ylsnhrukizj6kfprn5rbawyaophnkwgw": {
+      "name": "kokkos",
+// ...
+```
+
+<style>
+pre {
+  font-size: 0.5rem !important;
+  line-height: 0.5rem !important;
+}
+</style>
+
+
+---
+
+## Preparing a development environment
+
+Let's add other tools to the environment before installation.
+
+```ansi
+$ spack add cmake
+[1;34m==>[0m Adding cmake to environment /home/ubuntu/myenv
+
+$ spack concretize -Uf
+[1;34m==>[0m Concretized 2 specs:
+[0;32m[+][0m  [0;90mse36owz[0m  cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+     ...
+[1;34m==>[0m Updating view at /home/ubuntu/myenv/.spack-env/view
+$
+```
+
+---
+
+We can use the `spack spec` command to show a spec. If you don't provide a spec, it will print the spec for the
+activated environment.
+
+
+```ansi
+[0;32m[+][0m  cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;31m[-][0m          ^openssl[0;36m@3.4.1[0m[0;94m~docs+shared build_system=generic certs=mozilla[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^ca-certificates-mozilla[0;36m@2025-02-25[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^perl[0;36m@5.40.0[0m[0;94m+cpanm+opcode+open+shared+threads build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^pkgconf[0;36m@2.3.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+...
+```
+
+- <code class="text-green">[+]</code>: already installed.
+- <code class="text-gray whitespace-pre"> - </code> or <code class="text-red">[-]</code>: not installed or uninstalled.
+
+---
+
+```ansi
+$ spack install
+    ...
+[1;34m==>[0m kokkos: Executing phase: 'install'
+[1;34m==>[0m kokkos: Successfully installed kokkos-4.5.01-ylsnhrukizj6kfprn5rbawyaophnkwgw
+  Stage: 0.06s.  Cmake: 0.31s.  Build: 4.76s.  Install: 0.11s.  Post-install: 0.09s.  Total: 5.38s
+[1;32m[+][0m /home/ubuntu/.spack/install/[padded-to-128-chars]/linux-icelake/kokkos-4.5.01-ylsnhrukizj6kfprn5rbawyaophnkwgw
+[1;34m==>[0m Updating view at /home/ubuntu/myenv/.spack-env/view
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -725,4 +840,3 @@ To run tests during installation: `spack install --test=root myapp`
   </div>
 </div>
 
----
