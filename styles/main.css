@@ -1,3 +1,25 @@
 .slidev-code {
     font-size: 1.1rem !important;
 }
+
+.slidev-page-1 .cover {
+  position: relative;
+}
+
+.slidev-page-1 .cover::after {
+  content: "";
+
+  background: rgb(0,0,0);
+  background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#slideshow > div.slidev-page.slidev-page-1 > div > div {
+  z-index: 2;
+}

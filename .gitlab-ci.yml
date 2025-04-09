@@ -12,8 +12,8 @@ pages:
   before_script:
     - npm install --global corepack@latest
     - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
-    - pnpm config set store-dir .pnpm-store
+    # - corepack prepare pnpm@latest-10 --activate
+    # - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install
     - pnpm build --base /wp3/spack-tutorial/ --out public

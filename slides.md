@@ -5,7 +5,7 @@ colorSchema: dark
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 # background: https://cdn.jsdelivr.net/gh/slidevjs/slidev-covers@main/static/tZr3_JuURZA.webp
-background: https://images.pexels.com/photos/2473183/pexels-photo-2473183.jpeg?cs=srgb&dl=pexels-nickoloui-2473183.jpg&fm=jpg&w=1920&h=1080
+background: https://images.pexels.com/photos/11047223/pexels-photo-11047223.jpeg?cs=srgb&dl=pexels-vlad-samoylik-173187996-11047223.jpg&fm=jpg&w=1920&h=1282
 # some information about your slides (markdown enabled)
 title: Spack tutorial
 info: |
