@@ -1,7 +1,7 @@
 ---
 # You can also start simply with 'default'
 theme: seriph
-colorSchema: dark
+colorSchema: auto
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 # background: https://cdn.jsdelivr.net/gh/slidevjs/slidev-covers@main/static/tZr3_JuURZA.webp
@@ -45,137 +45,8 @@ Fernando Ayats
 <Toc maxDepth="1" />
 
 ---
-layout: center
+src: ./slides/intro.md
 ---
-
-# Why package managers, and why Spack
-
-
----
-
-## Context
-
-**Challenge:**
-
-- Exascale apps are increasingly **difficult to build, deploy, maintain or test**. The complexity of apps grows, as well as the machines’ complexity. Current software deployment doesn’t scale properly with this complexity.
-
-**At stake:**
-
-- Need for **HPC DevOps tools and methodologies**, that enhance productivity, interoperability and portability.
-
----
-
-## Our target as NumPEx PC5
-
-<div class="grid grid-cols-[1fr_max-content]">
-  <div>
-
-  <p>
-    <strong v-mark.red="-1">Application developers</strong>
-  </p>
-
-  - Ease difficulty in building and developing apps and libraries.
-  - Portable solution from a laptop to the supercomputer.
-  - CI/CD ready.
-
-  **System administrators**
-  - Ease package administration and testing.
-  - Align interests of developers and sysadmins.
-
-  **Application users**
-  - Provide *turn-key* solutions for deployments.
-  - Fearless migrations between machines and updates.
-
-
-  </div>
-
-  <div class="mr-20 mt-10">
-
-  <image class="flex flex-col items-center">
-    <img width="150px" src="https://numpex.org/wp-content/uploads/sites/6/2024/12/Logo-NumPEx-couleurs-etat-v.4-web.png" >
-    <strong>PC5 (ExaDI)</strong>
-  </image>
-
-  </div>
-</div>
-
----
-
-## Classical way to deploy software
-
-- Manually installing libraries (git clone, CMake, make install, etc.)
-  - ❌ Time consuming
-  - ❌ Error prone
-  - ❌ Automation scripts are fragile
-  - ❌ Not very reproducible, with colleagues, other machines or in the future
-
-- `module load <name>`
-  - ✅ Cleaner solution than manually installing libraries
-  - ❌ Modules are specific to each cluster and not portable
-  - ❌ Not reproducible in the future
-  - ❌ Limited to the packages and versions provided by the admin team
-
-<style>
-ul {
-  list-style: none;
-}
-</style>
-
----
-
-## Use a package manager!
-
-Package manager are very good at managing your dependencies for you.
-
-- ✅ Easy installation of dependencies
-- ✅ Reproducible stack of software, without fragile scripts
-- ✅ Adaptable to different platforms
-- ✅ CI/CD Ready
-
-<div class="flex flex-row w-full justify-center justify-items-center gap-10 mt-10">
-  <img src="https://guix.gnu.org/themes/initial/img/Guix.png">
-  <img src="https://computing.llnl.gov/sites/default/files/styles/large/public/2021-03/spack-logo-220-LLNL.png?itok=lfy7ws3W">
-  <img src="https://21018705.fs1.hubspotusercontent-na1.net/hubfs/21018705/Logos%20March%20Update/Sylabs/PNG/SingularityLogo.png">
-</div>
-
-<style>
-  img {
-    padding: 1rem;
-    border-radius: 20px;
-    background-color: white;
-    width: 150px;
-  }
-
-  ul {
-    list-style: none;
-  }
-</style>
-
----
-
-# Why Spack for HPC?
-
-<div class="grid grid-cols-[1fr_max-content]">
-
-  <div>
-
-  - 🔬 Designed specifically for scientific HPC applications
-  - 🔀 Handles different versions and configurations of the same package
-  - 💻 Supports **multiple compilers** simultaneously
-  - 📡 Native **MPI** implementation support
-  - 🔥 First-class **CUDA** & GPU software stack integration
-  - 🔄 Reproducible software stacks across different machines *
-  - 😃 Easy user experience, but also powerful
-
-  </div>
-
-  <img class="mr-15" src="https://spack.io/assets/images/spack-logo-white.svg" width=120>
-</div>
-
-From https://spack.io:
-
-> Spack is a package manager for **supercomputers**, Linux, and macOS. It makes installing scientific software easy.
-> Spack isn’t tied to a particular language; you can build a software stack in Python or R, link to libraries written in C, C++, or Fortran, and easily swap compilers or target specific microarchitectures.
 
 ---
 hideInToc: true
@@ -461,6 +332,71 @@ $ spack concretize -Uf
 
 ---
 
+```ansi {1,2}
+fayatsllamas@chifflot-2 $ spack spec
+[0;90m - [0m  cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m      ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m          ^nghttp2[0;36m@1.65.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m              ^diffutils[0;36m@3.10[0m[0;94m build_system=autotools[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m                  ^libiconv[0;36m@1.17[0m[0;94m build_system=autotools libs:=shared,static[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m          ^openssl[0;36m@3.4.1[0m[0;94m~docs+shared build_system=generic certs=mozilla[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m              ^ca-certificates-mozilla[0;36m@2025-02-25[0m[0;94m build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m              ^perl[0;36m@5.40.0[0m[0;94m+cpanm+opcode+open+shared+threads build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m                  ^berkeley-db[0;36m@18.1.40[0m[0;94m+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m                  ^bzip2[0;36m@1.0.8[0m[0;94m~debug~pic+shared build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m                  ^gdbm[0;36m@1.23[0m[0;94m build_system=autotools[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m                      ^readline[0;36m@8.2[0m[0;94m build_system=autotools patches:=1ea4349,24f587b,3d9885e,5911a5b,622ba38,6c8adf8,758e2ec,79572ee,a177edc,bbf97f1,c7b45ff,e0013d9,e065038[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m          ^pkgconf[0;36m@2.3.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;95m[e][0m      ^gcc[0;36m@10.2.1[0m[0;94m~binutils+bootstrap~graphite~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' patches:=0d13622,2c18531,b5e049d,bd4828c,cc6112d[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m      ^gcc-runtime[0;36m@10.2.1[0m[0;94m build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;95m[e][0m      ^glibc[0;36m@2.31[0m[0;94m build_system=autotools[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m      ^gmake[0;36m@4.4.1[0m[0;94m~guile build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m      ^ncurses[0;36m@6.5[0m[0;94m~symlinks+termlib abi=none build_system=autotools patches:=7a351bc[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m      ^zlib-ng[0;36m@2.2.4[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+[0;90m - [0m  kokkos[0;36m@4.6.00[0m[0;94m~aggressive_vectorization~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-debian11-skylake_avx512[0m
+```
+
+<br/>
+
+- <code class="text-pink">arch=linux-debian11-skylake_avx512</code> When concretized on the machine `chifflot-2`.
+- <code class="text-pink">arch=linux-ubuntu24.04-icelake</code> When concretized on my laptop.
+
+<style>
+pre {
+  max-height: 300px;
+}
+</style>
+
+---
+
+Spack's concretizer also considers external dependencies from the system, while Guix is completely isolated down to `libc`.
+
+<div class="flex justify-center">
+  <img src="./guix-v-spack.svg" class="h-80 rounded-xl">
+</div>
+
+
+
+---
+
+Spack uses the **concretizer** will try to reconcile all specification bounds, using a [SAT solver (clingo)](https://github.com/potassco/clingo).
+
+- Package A requires <code>hdf5<span class="color-green">@1.10.0:</span><span class="color-purple">+mpi</span></code>
+- Package B requires <code>hdf5<span class="color-green">@1.14.0:</span></code>
+- **Result**: Spack will use <code>hdf5<span class="color-green">@1.14.0:</span><span class="color-purple">+mpi</span></code>
+
+<br/>
+
+- Package A requires <code>bazel<span class="color-green">@6</span></code>
+- Package B requires <code>bazel<span class="color-green">@7</span></code>
+- **Result**: Concretization error. May be worked around by allowing 2 different Bazel's in the dependency graph, etc.
+
+
+
+
+---
+
 `spack concretize` will generate the `spack.lock` alongside your `spack.yaml`.
 If skip the concretization step, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
 
@@ -586,13 +522,9 @@ $ spack spec
 }
 </style>
 
-
-
 ---
-layout: center
+src: ./slides/compiler.md
 ---
-
-# Compiler configuration
 
 
 
@@ -873,27 +805,11 @@ class MyMpiApp(CMakePackage):
 To run tests during installation: `spack install --test=root myapp`
 
 ---
-
-# Spack Resources
-
-- [Official Documentation](https://spack.readthedocs.io/)
-- [Spack GitHub Repository](https://github.com/spack/spack)
-- [Spack Tutorial](https://spack-tutorial.readthedocs.io/)
-- [Spack Slack Channel](https://spackpm.slack.com/)
-
-<div class="flex justify-center">
-  <img src="https://spack.io/assets/images/spack-logo.svg" width="200">
-</div>
-
+layout: center
 ---
 
 # Questions?
 
-<div class="flex h-full items-center justify-center">
-  <div class="text-center">
-    <h2 class="text-3xl font-bold mb-10">Thank you!</h2>
-    <p class="text-xl">Fernando Ayats</p>
-    <p>NumPEx WP3 / WP4</p>
-  </div>
-</div>
-
+---
+src: ./slides/sources.md
+---
