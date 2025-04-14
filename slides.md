@@ -33,12 +33,17 @@ favicon: https://numpex-pc5.gitlabpages.inria.fr/tutorials/images/favicon.png
 hideInToc: true
 ---
 
-<h1 class="font-black">Spack tutorial</h1>
+<div class="flex flex-row items-center justify-center gap-12">
+  <img src="./Logo_France_2030.svg" width=150 class="bg-white rounded-full">
+  <div class="flex flex-col items-start">
+    <h1 class="font-black">Spack tutorial</h1>
+    <h3>NumPEx WP3 / WP4</h3>
+    <h3>Fernando Ayats Llamas</h3>
+  </div>
+</div>
 
-## NumPEx WP3 / WP4
 
 
-Fernando Ayats
 
 
 ---
