@@ -40,9 +40,6 @@ hideInToc: true
 
 Fernando Ayats
 
----
-
-<Toc maxDepth="1" />
 
 ---
 src: ./slides/intro.md
@@ -624,6 +621,9 @@ src: ./slides/compiler.md
 
 
 
+- `spack create`: Generate a new package definition in the **active Spack installation**.
+- `spack edit`: Open the python file for a package.
+- `spack checksum`: Generate the checksum for some source tarball.
 
 
 
