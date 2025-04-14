@@ -1,4 +1,4 @@
-# Resources
+# Thank you for participating! Any questions?
 
 - [NumPEx Exa-DI Tutorials](https://numpex-pc5.gitlabpages.inria.fr/tutorials/)
 - [PC5 WP3 Mailing list](mailto:numpex-pc5-wp3@inria.fr)

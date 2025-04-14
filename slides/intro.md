@@ -2,7 +2,7 @@
 layout: center
 ---
 
-# Why package managers, and why Spack
+# Why package managers? Why Spack?
 
 
 ---

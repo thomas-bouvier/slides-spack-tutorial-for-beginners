@@ -23,3 +23,13 @@
 #slideshow > div.slidev-page.slidev-page-1 > div > div {
   z-index: 2;
 }
+
+a {
+  word-break: break-all;
+}
+
+.slidev-code .line.diff.add::before {
+  content: "+";
+  position: absolute;
+  @apply text-green;
+}

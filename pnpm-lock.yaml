@@ -23,6 +23,10 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.2)
+    devDependencies:
+      '@shikijs/transformers':
+        specifier: ^3.2.2
+        version: 3.2.2
 
 packages:
 
@@ -521,6 +525,9 @@ packages:
   '@shikijs/core@3.2.1':
     resolution: {integrity: sha512-FhsdxMWYu/C11sFisEp7FMGBtX/OSSbnXZDMBhGuUDBNTdsoZlMSgQv5f90rwvzWAdWIW6VobD+G3IrazxA6dQ==}
 
+  '@shikijs/core@3.2.2':
+    resolution: {integrity: sha512-yvlSKVMLjddAGBa2Yu+vUZxuu3sClOWW1AG+UtJkvejYuGM5BVL35s6Ijiwb75O9QdEx6IkMxinHZSi8ZyrBaA==}
+
   '@shikijs/engine-javascript@3.2.1':
     resolution: {integrity: sha512-eMdcUzN3FMQYxOmRf2rmU8frikzoSHbQDFH2hIuXsrMO+IBOCI9BeeRkCiBkcLDHeRKbOCtYMJK3D6U32ooU9Q==}
 
@@ -544,6 +551,9 @@ packages:
   '@shikijs/themes@3.2.1':
     resolution: {integrity: sha512-k5DKJUT8IldBvAm8WcrDT5+7GA7se6lLksR+2E3SvyqGTyFMzU2F9Gb7rmD+t+Pga1MKrYFxDIeyWjMZWM6uBQ==}
 
+  '@shikijs/transformers@3.2.2':
+    resolution: {integrity: sha512-DQvrPdygc6NNdbfeOZoO1+KiRnnjUQuuPLwsAbUuSKq4QFLD0Ik15FbHojmot5NbgCQRbVr8ufRg8U6X5rGWuQ==}
+
   '@shikijs/twoslash@3.2.1':
     resolution: {integrity: sha512-2ZiL9xXY8JRXHG5BdJXE9KoIeSsyH9/yK+YTN90/SUIKkq7Nf5dWqXp5wJ6+4SL0FQO8mq2HUutwqU+gamOgOA==}
     peerDependencies:
@@ -551,6 +561,9 @@ packages:
 
   '@shikijs/types@3.2.1':
     resolution: {integrity: sha512-/NTWAk4KE2M8uac0RhOsIhYQf4pdU0OywQuYDGIGAJ6Mjunxl2cGiuLkvu4HLCMn+OTTLRWkjZITp+aYJv60yA==}
+
+  '@shikijs/types@3.2.2':
+    resolution: {integrity: sha512-a5TiHk7EH5Lso8sHcLHbVNNhWKP0Wi3yVnXnu73g86n3WoDgEra7n3KszyeCGuyoagspQ2fzvy4cpSc8pKhb0A==}
 
   '@shikijs/vitepress-twoslash@3.2.1':
     resolution: {integrity: sha512-lQNmw3v9gBFYdxfCW5upcDwfQu8BTJz4D4VPN72XElBA6gW82PKNmzZDoHhVcEmgm/cRQpPjpiY6CYChtv/AEw==}
@@ -3165,6 +3178,13 @@ snapshots:
       '@types/hast': 3.0.4
       hast-util-to-html: 9.0.5
 
+  '@shikijs/core@3.2.2':
+    dependencies:
+      '@shikijs/types': 3.2.2
+      '@shikijs/vscode-textmate': 10.0.2
+      '@types/hast': 3.0.4
+      hast-util-to-html: 9.0.5
+
   '@shikijs/engine-javascript@3.2.1':
     dependencies:
       '@shikijs/types': 3.2.1
@@ -3197,6 +3217,11 @@ snapshots:
     dependencies:
       '@shikijs/types': 3.2.1
 
+  '@shikijs/transformers@3.2.2':
+    dependencies:
+      '@shikijs/core': 3.2.2
+      '@shikijs/types': 3.2.2
+
   '@shikijs/twoslash@3.2.1(typescript@5.8.2)':
     dependencies:
       '@shikijs/core': 3.2.1
@@ -3207,6 +3232,11 @@ snapshots:
       - supports-color
 
   '@shikijs/types@3.2.1':
+    dependencies:
+      '@shikijs/vscode-textmate': 10.0.2
+      '@types/hast': 3.0.4
+
+  '@shikijs/types@3.2.2':
     dependencies:
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4

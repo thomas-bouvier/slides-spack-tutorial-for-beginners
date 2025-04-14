@@ -29,9 +29,3 @@ gcc[0;36m@=13.3.0[0m[0;94m languages='c,c++'[0m[0;35m arch=linux-ubuntu24.0
 
 Further documented here: https://spack.readthedocs.io/en/latest/getting_started.html#compiler-configuration
 
-
----
-
-## Intel compilers
-
-TODO
