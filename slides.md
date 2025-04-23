@@ -55,7 +55,14 @@ hideInToc: true
 layout: center
 ---
 
-# Getting started with Spack
+# Hands-on tutorial
+
+- SSH into a computer center -- Grid'5000 as the baseline.
+- Install Spack, discover its commands.
+- Install and run a Kokkos application, and run with GPU support.
+- Time for questions and discussion.
+
+
 
 ---
 
@@ -75,7 +82,12 @@ These are some of the key insights to understand how Spack works:
 ## Running example: Kokkos + CUDA on Grid'5000
 
 
+```
+$ ssh lille.g5k
+```
+
 Connection guide: https://www.grid5000.fr/w/Getting_Started#Recommended_tips_and_tricks_for_an_efficient_use_of_Grid.275000
+
 ```ssh-config
 # ~/.ssh/config
 Host g5k
@@ -86,10 +98,6 @@ Host *.g5k
   User login
   ProxyCommand ssh g5k -W "$(basename %h .g5k):%p"
   ForwardAgent no
-```
-
-```
-$ ssh lille.g5k
 ```
 
 
@@ -104,29 +112,17 @@ $ git clone https://github.com/spack/spack
 
 [0;90m# Filter to get less files (310M -> 194M), and optimize for slow disks[0m
 $ git clone -c feature.manyFiles=true --filter=blob:none https://github.com/spack/spack
-```
 
-<v-click>
-
-```ansi
 [0;90m# Activate Spack[0m
 $ . spack/share/spack/setup-env.sh
 [0;90m# If you use fish: source spack/share/spack/setup-env.fish[0m
-```
 
-</v-click>
-
-
-<v-click>
-
-```
 $ spack --version
 1.0.0.dev0 (199133fca402022a27002a54f25d735e7a27cce5)
 ```
 
 The Spack executable and the versions for all packages are **self-contained** in the Spack folder.
 
-</v-click>
 
 
 ---
@@ -139,11 +135,7 @@ Web interface: https://packages.spack.io
 $ spack list kokkos
 hpx-kokkos  kokkos  kokkos-kernels  kokkos-kernels-legacy  kokkos-legacy  kokkos-nvcc-wrapper  kokkos-tools  py-pennylane-lightning-kokkos  py-pykokkos-base
 [1;34m==>[0m 9 packages
-```
 
-<v-click>
-
-```ansi
 $ spack info kokkos
 [1;34mCMakePackage:   [0mkokkos
 
@@ -154,7 +146,6 @@ $ spack info kokkos
 [1;34mHomepage: [0mhttps://github.com/kokkos/kokkos
 ```
 
-</v-click>
 
 ---
 
@@ -200,6 +191,23 @@ Spec documentation: https://spack.readthedocs.io/en/latest/basic_usage.html#spec
 
 ---
 
+## Spack's Concretizer
+
+Given a set of requirements:
+
+- System is an <code class="color-pink">debian11-x86_64</code>
+- The compiler is `%gcc@10`
+- The user wants:
+  - Package <code>A<span class="color-cyan">@1.0:</span><span class="color-blue">+mpi</span></code>
+  - Package <code>B<span class="color-blue">+cuda</span></code>
+    - Which requires <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+cuda</span></code>
+
+**... Concretization**
+
+Result in what you see from `spack spec`, the actual dependency tree.
+
+---
+
 ```ansi{1,2,9}
 $ spack spec kokkos +cuda cuda_arch=120
 [0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
@@ -218,6 +226,36 @@ $ spack spec kokkos +cuda cuda_arch=120
 ```
 
 Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture.
+
+---
+
+Spack's concretizer also considers external dependencies from the system, while Guix is completely isolated down to `libc`.
+
+<div class="flex justify-center">
+  <img src="./guix-v-spack.svg" class="h-80 rounded-xl">
+</div>
+
+---
+
+Spack and Guix use a **Input addressing algorithm**. Each package is installed into a unique prefix. Multiple
+packages with same name, but **different specs** may be "installed" at the same time.
+
+We manage which packages are brought into scope with `spack load` or Spack environments.
+
+
+```
+$ ls -1 spack-tuto/opt/spack/linux-x86_64/
+
+ca-certificates-mozilla-2025-02-25-czmj7w6shuex2krckv6zjb353xzg24g2
+cmake-3.31.6-elkqc2tem57cee4zugaonlhrb2u3zhx6
+compiler-wrapper-1.0-5rpljyjshkdolviqkg4q5ou4xdbvtxw2
+curl-8.11.1-zw6anfi2jqysycmgwvwmkt5tupcfdaxe
+gcc-runtime-10.2.1-ju5hltznpg4miborezunlvf67ahpqzhm
+gmake-4.4.1-c5a2htejzzhhpsxcopn7y3zchmfs2hab
+ncurses-6.5-dk4sla3ic3666dlgvpcj4x67tg3j7hch
+nghttp2-1.65.0-mkpt6dhlz5tmlhioknbufphupwlj5ulm
+```
+
 
 ---
 
@@ -400,29 +438,7 @@ spack:
 $ spack concretize -Uf
 ```
 
----
 
-Spack's concretizer also considers external dependencies from the system, while Guix is completely isolated down to `libc`.
-
-<div class="flex justify-center">
-  <img src="./guix-v-spack.svg" class="h-80 rounded-xl">
-</div>
-
-
-
----
-
-Spack uses the **concretizer** will try to reconcile all specification bounds, using a [SAT solver (clingo)](https://github.com/potassco/clingo).
-
-- Package A requires <code>hdf5<span class="color-cyan">@1.10.0:</span><span class="color-blue">+mpi</span></code>
-- Package B requires <code>hdf5<span class="color-cyan">@1.14.0:</span></code>
-- **Result**: Spack will use <code>hdf5<span class="color-cyan">@1.14.0:</span><span class="color-blue">+mpi</span></code>
-
-<br/>
-
-- Package A requires <code>bazel<span class="color-cyan">@6</span></code>
-- Package B requires <code>bazel<span class="color-cyan">@7</span></code>
-- **Result**: Concretization error. May be worked around by allowing 2 different Bazel's in the dependency graph, etc.
 
 
 
@@ -432,7 +448,6 @@ Spack uses the **concretizer** will try to reconcile all specification bounds, u
 `spack concretize` will generate the `spack.lock` alongside your `spack.yaml`.
 If skip the concretization step, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
 
-**Important**: you should always commit your lockfiles.
 
 
 ```json
@@ -485,27 +500,6 @@ $ spack concretize -Uf
 [1;34m==>[0m Updating view at /home/ubuntu/myenv/.spack-env/view
 $
 ```
-
----
-
-We can use the `spack spec` command to show a spec. If you don't provide a spec, it will print the spec for the
-activated environment.
-
-
-```ansi
-[0;32m[+][0m  cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;31m[-][0m          ^openssl[0;36m@3.4.1[0m[0;94m~docs+shared build_system=generic certs=mozilla[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^ca-certificates-mozilla[0;36m@2025-02-25[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^perl[0;36m@5.40.0[0m[0;94m+cpanm+opcode+open+shared+threads build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^pkgconf[0;36m@2.3.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-...
-```
-
-- <code class="text-green">[+]</code>: already installed.
-- <code class="text-gray whitespace-pre"> - </code> or <code class="text-red">[-]</code>: not installed or uninstalled.
 
 ---
 
@@ -585,13 +579,16 @@ For development, if we used `kokkos ~cuda`, we can run it directly. For the GPU 
 
 ```ansi
 [0;90m# Interactive shell on a [0;33mCPU[0m partition[0m
-$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special -I -p [0;33mchiclet[0m -l /host=1
+$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special \
+  -I -p [0;33mchiclet[0m -l /host=1,walltime=0:05:00
 
 [0;90m# Interactive shell on a [0;32mGPU[0m node[0m
-$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special -I -p [0;32mchifflot[0m -l /host=1
+$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special \
+  -I -p [0;32mchifflot[0m -l /host=1,walltime=0:05:00
 
 [0;90m# Interactive shell on a [0;32mGPU[0m node with only 1 GPU[0m
-$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special -I -p [0;32mchifflot[0m -l /host=1
+$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special
+  -I -p [0;32mchifflot[0m -l /host=1,walltime=0:05:00
 ```
 
 ```
