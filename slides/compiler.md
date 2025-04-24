@@ -1,11 +1,4 @@
----
-layout: center
----
-
-
-# Compiler configuration
-
----
+## Compiler configuration
 
 Spack won't install a compiler by default, it will use the compiler from the _system_ automatically.
 
@@ -23,9 +16,6 @@ gcc[0;36m@=13.3.0[0m[0;94m languages='c,c++'[0m[0;35m arch=linux-ubuntu24.0
   compilers:
     c: /usr/bin/gcc
     cxx: /usr/bin/g++
-  flags:
-  extra rpaths:
 ```
 
-Further documented here: https://spack.readthedocs.io/en/latest/getting_started.html#compiler-configuration
 

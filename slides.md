@@ -550,19 +550,21 @@ $ ./build/myapp
 # Recommended workflow
 
 For local development:
-- Clone Spack and activate.
-- Create an environment and add your project's dependencies. For a Python project, you might want to use Spack instead of Pip.
+- Start with a `spack.yaml`
+- Add you project dependencies.
 
-For deployment on the supercomputer:
-- Clone Spack and activate, as locally.
-- You may need to create a new `spack.yaml` with the specifics of the computer (<code class="text-blue">+cuda</code>, <code class="text-blue">+rocm</code>, <code class="text-blue">cuda_arch</code>, etc).
-- If you need to cut down compilation times, use a Binary Cache.
+For advanced users:
+- Use Spack's official cache or setup a cache on CI/CD.
+- Package your application itself.
 
 
 ---
 src: ./slides/compiler.md
 ---
 
+---
+src: ./slides/externals.md
+---
 
 
 ---
