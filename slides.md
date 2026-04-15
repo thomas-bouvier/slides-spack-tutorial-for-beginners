@@ -7,7 +7,7 @@ colorSchema: auto
 # background: https://cdn.jsdelivr.net/gh/slidevjs/slidev-covers@main/static/tZr3_JuURZA.webp
 background: https://images.pexels.com/photos/11047223/pexels-photo-11047223.jpeg?cs=srgb&dl=pexels-vlad-samoylik-173187996-11047223.jpg&fm=jpg&w=1920&h=1282
 # some information about your slides (markdown enabled)
-title: Spack tutorial
+title: Spack tutorial for Beginners
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
@@ -36,9 +36,9 @@ hideInToc: true
 <div class="flex flex-row items-center justify-center gap-12">
   <img src="./Logo_France_2030.svg" width=150 class="bg-white rounded-full">
   <div class="flex flex-col items-start">
-    <h1 class="font-black">Spack tutorial</h1>
+    <h1 class="font-black">Spack Tutorial for Beginners</h1>
     <h3>NumPEx WP3 / WP4</h3>
-    <h3>Fernando Ayats Llamas</h3>
+    <h4><u>Thomas Bouvier</u> with many slides from Fernando Ayats Llamas</h4>
   </div>
 </div>
 
