@@ -2,20 +2,20 @@
 layout: center
 ---
 
-# Why package managers? Why Spack?
+## Abstract
 
+This Numpex tutorial related to software packaging will specifically target beginners with the Spack package manager. The tutorial will introduce Spack installation, base commands, specifications, configs, and environments. We are also going to cover some slightly more advanced topics, like using the official Numpex binary cache and development workflows. No prior experience with Spack is required.
+
+The webinar will be organized as a hands-on session so users can directly experiment with Spack. We will provide accounts on Grid'5000 for all attendees. We will be available to assist you and answer questions via video and chat.
+
+Note that this tutorial is part of the Numpex software integration strategy backed by the Exa-DI WP3 team. Our ambition is to have all Numpex-related libraries packaged with Spack, make Spack-based deployment part of every developer’s arsenal, and work with computing centers to make Spack-based user-level software deployment as frictionless as possible.
 
 ---
+layout: center
+---
 
-## Context
+# Why package managers? Why Spack?
 
-**Challenge:**
-
-- Exascale apps are increasingly **difficult to build, deploy, maintain or test**. The complexity of apps grows, as well as the machines’ complexity. Current software deployment doesn’t scale properly with this complexity.
-
-**At stake:**
-
-- Need for **HPC DevOps tools and methodologies**, that enhance productivity, interoperability and portability.
 
 ---
 
@@ -89,7 +89,7 @@ Package manager are very good at managing your dependencies for you.
 <div class="flex flex-row w-full justify-center justify-items-center gap-10 mt-10">
   <img src="https://guix.gnu.org/themes/initial/img/Guix.png">
   <img src="https://computing.llnl.gov/sites/default/files/styles/large/public/2021-03/spack-logo-220-LLNL.png?itok=lfy7ws3W">
-  <img src="https://21018705.fs1.hubspotusercontent-na1.net/hubfs/21018705/Logos%20March%20Update/Sylabs/PNG/SingularityLogo.png">
+  <img src="https://apptainer.org/docs/admin/main/_static/logo.png">
 </div>
 
 <style>
