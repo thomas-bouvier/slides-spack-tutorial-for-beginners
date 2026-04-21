@@ -4,11 +4,13 @@ layout: center
 
 ## Abstract
 
-This Numpex tutorial related to software packaging will specifically target beginners with the Spack package manager. The tutorial will introduce Spack installation, base commands, specifications, configs, and environments. We are also going to cover some slightly more advanced topics, like using the official Numpex binary cache and development workflows. No prior experience with Spack is required.
+Date/time: Tuesday 28th, April at 2 pm (~2h)
 
-The webinar will be organized as a hands-on session so users can directly experiment with Spack. We will provide accounts on Grid'5000 for all attendees. We will be available to assist you and answer questions via video and chat.
+> This Numpex tutorial related to software packaging will specifically target beginners with the Spack package manager. The tutorial will introduce Spack installation, base commands, specifications, configs, and environments. We are also going to cover some slightly more advanced topics, like using the official Numpex binary cache and development workflows. No prior experience with Spack is required.
 
-Note that this tutorial is part of the Numpex software integration strategy backed by the Exa-DI WP3 team. Our ambition is to have all Numpex-related libraries packaged with Spack, make Spack-based deployment part of every developer’s arsenal, and work with computing centers to make Spack-based user-level software deployment as frictionless as possible.
+> The webinar will be organized as a hands-on session so users can directly experiment with Spack. We will provide accounts on Grid'5000 for all attendees. We will be available to assist you and answer questions via video and chat.
+
+> Note that this tutorial is part of the Numpex software integration strategy backed by the Exa-DI WP3 team. Our ambition is to have all Numpex-related libraries packaged with Spack, make Spack-based deployment part of every developer’s arsenal, and work with computing centers to make Spack-based user-level software deployment as frictionless as possible.
 
 ---
 layout: center
@@ -16,6 +18,59 @@ layout: center
 
 # Why package managers? Why Spack?
 
+
+---
+
+## Streamlining the setup of a scientific software stack
+
+<div class="grid grid-cols-[1fr_max-content]">
+  <div>
+
+  **How to install these dependencies?**
+  - Modular application with build or link-type dependencies, multiple languages, and various build tools
+  - Different systems, environments, local machines or HPC clusters
+  - Hard to be an expert across the entire toolchain; we want a solution that's easy enough
+
+  </div>
+
+
+  <div class="mr-20 mt-10">
+
+  <image class="flex flex-col items-center">
+    <img width="400px" src="../complex_stack.png" >
+    <strong>A complex software stack</strong>
+  </image>
+
+  </div>
+
+</div>
+
+
+---
+
+### Gyselalib++
+
+<div class="grid grid-cols-[1fr_max-content]">
+  <div>
+
+  - Gyselalib builds on top of domain expert libraries
+    - With heterogeneous languages: CUDA, HIP, SYCL, C++, C, Fortran, Python
+    - Libraries have many compile options
+    - Some are usually available on clusters but not always built with required options
+    - Some are very unlikely available
+  - Non exhaustive list of direct dependencies: DDC, Eigen, Koliop, Kokkos, kokkos-fft, Kokkos Kernels, Google test, Ginkgo, MPI, PDI, NetCDF, HDF5, Dask, Xarray, h5py, matplotlib...
+
+  </div>
+
+  <div class="mr-20 mt-10">
+
+  <image class="flex flex-col items-center">
+    <img width="150px" src="https://gyselax.github.io/media/GYSELA_simu_hu2cd80fa9de07f75943f96ae0efbe83ce_1057076_1200x0_resize_lanczos_2.png" >
+    <strong>Modeling turbulence in tokamak plasmas</strong>
+  </image>
+
+  </div>
+</div>
 
 ---
 
@@ -79,7 +134,7 @@ ul {
 
 ## Use a package manager!
 
-Package manager are very good at managing your dependencies for you.
+Package managers are very good at managing your dependencies for you.
 
 - ✅ Easy installation of dependencies
 - ✅ Reproducible stack of software, without fragile scripts
@@ -89,7 +144,7 @@ Package manager are very good at managing your dependencies for you.
 <div class="flex flex-row w-full justify-center justify-items-center gap-10 mt-10">
   <img src="https://guix.gnu.org/themes/initial/img/Guix.png">
   <img src="https://computing.llnl.gov/sites/default/files/styles/large/public/2021-03/spack-logo-220-LLNL.png?itok=lfy7ws3W">
-  <img src="https://apptainer.org/docs/admin/main/_static/logo.png">
+  <img src="https://avatars.githubusercontent.com/u/487568?s=200&v=4">
 </div>
 
 <style>
@@ -117,8 +172,7 @@ Package manager are very good at managing your dependencies for you.
   - 🔬 Designed specifically for scientific HPC applications
   - 🔀 Handles different versions and configurations of the same package
   - 💻 Supports **multiple compilers** simultaneously
-  - 📡 Native **MPI** implementation support
-  - 🔥 First-class **CUDA** & GPU software stack integration
+  - 🔥 Native **MPI** and GPU software stack support
   - 🔄 Reproducible software stacks across different machines *
   - 😃 Easy user experience, but also powerful
 
