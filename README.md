@@ -8,14 +8,15 @@ Note that this tutorial is part of the Numpex software integration strategy back
 
 ## Bottlenecks
 
-- git clone
-- spack list (first spack run)
+Méthode :
 
-- concretization slide
-- CHnage myenv
-- spack external and compilers
-- Mention the spack.yaml config
+- se co à g5k
+
+Points :
+
+- binary cache
+- spack develop
 
 ## Credits
 
-Original slides at [https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial](https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial).
+Original slides by Fernando Ayats Llamas at [https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial](https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial).

@@ -57,8 +57,8 @@ layout: center
 
 # Hands-on tutorial
 
-- SSH into a computer center -- Grid'5000 as the baseline.
-- Install Spack, discover its commands.
+- SSH into a computer center -- we use Grid'5000 in this tutorial.
+- Install Spack, discover some of its commands.
 - Install and run a Kokkos application, and run with GPU support.
 - Time for questions and discussion.
 
@@ -72,10 +72,10 @@ These are some of the key insights to understand how Spack works:
 
 - 📦 Install Spack by cloning the [repo](https:://github.com/spack/spack). Multiple installations allowed.
 - ✅ Activate Spack to run commands.
-- 📌 Available versions depend on your Spack clone.
-- 🤝 Integrates system packages with "externals".
-- 🎛️ Package specs allow options like <code class="color-blue">+cuda</code>.
-<!-- - 🌍 Environments enable global package installations. -->
+- 📌 Available package versions depend on your Spack clone.
+- 🌍 Write a list of "package specs" to be installed in your Spack environment.
+- 🤝 Integrate system packages with "externals".
+- 🎛️ Package specs allow to pass options like <code class="color-blue">+cuda</code>.
 
 ---
 
@@ -104,15 +104,13 @@ Host *.g5k
 ---
 
 
-To install Spack, we must clone the repo
+To install Spack, make sure you have Python & Git; Then, we must clone the repo
 
 ```ansi
 [0;90m# ==> Clone Spack[0m
-$ git clone https://github.com/spack/spack
-[0;90m# Filter to get less files (310M -> 194M), and optimize for slow disks[0m
-$ git clone -c feature.manyFiles=true --filter=blob:none https://github.com/spack/spack
+$ git clone --depth=2 https://github.com/spack/spack.git
 $ cd spack
-$ git checkout 199133 [0;90m# Locked Spack commit for the tutorial[0m
+$ git checkout 7e86478 [0;90m# Locked Spack commit for the tutorial[0m
 $ cd ~
 
 [0;90m# ==> Activate Spack[0m
@@ -120,10 +118,10 @@ $ . spack/share/spack/setup-env.sh
 [0;90m# For Fish Shell: source spack/share/spack/setup-env.fish[0m
 
 $ spack --version
-1.0.0.dev0 (199133fca402022a27002a54f25d735e7a27cce5)
+1.2.0.dev0 (7e864787bd15a516314d86002ce1cbabde7cbbe9)
 ```
 
-The Spack executable and the versions for all packages are **self-contained** in the Spack folder.
+The Spack executable and the versions for all packages are located in the Spack folder `~/spack`.
 
 
 
@@ -168,24 +166,28 @@ $ spack spec kokkos
 
 
 
-Instead of package names, Spack uses **package specs**:
+Instead of package names, Spack uses **package specs**: a spec is like a name, but it has a version, compiler, architecture, and build options associated with it.
 
 <code>
 kokkos <span class="color-cyan">@4.5.01</span> <span class="color-blue">~aggressive_vectorization build_type=Release</span> ...
 </code>
 
+Going from a package name to such a concrete spec is called **concretizing**.
+
 ---
 
-Spec documentation: https://spack.readthedocs.io/en/latest/basic_usage.html#specs-dependencies
+Spec documentation: https://spack.readthedocs.io/en/latest/package_fundamentals.html#specs-dependencies
 
-- <code>kokkos</code>: Package name
+<code>
+kokkos <span class="color-cyan">@4.5.01</span> <span class="color-blue">~aggressive_vectorization build_type=Release</span> ...
+</code>
+
 - <code class="color-cyan">@4.5.01</code>: [Version specifier](https://spack.readthedocs.io/en/latest/basic_usage.html#version-specifier).
   - Spack concretizes packages to a fixed version <code class="color-cyan">@X.Y.Z</code>.
   - As a user, you can specify a version range, e.g:
-    - <code class="color-cyan">@4.5:</code>: Take <code class="color-cyan">@4.5.0</code>, <code class="color-cyan">@4.5.1</code>, etc.
+    - <code class="color-cyan">@4.5:</code>: Take <code class="color-cyan">@4.5.0</code>, <code class="color-cyan">@4.5.1</code>, etc. / <code class="color-cyan">@:5</code>: Up to v5 included <code class="color-cyan">@5.0.0</code>, <code class="color-cyan">@5.1.0</code>, etc.
 - <code class="color-blue">~aggressive_vectorization</code>: Variant specifier.
-  - <code class="color-blue">+</code> means the feature is enabled.
-  - <code class="color-blue">~</code> (or <code class="color-blue">-</code>) means the feature is disabled.
+  - <code class="color-blue">+</code> means the feature is enabled / <code class="color-blue">~</code> means the feature is disabled.
   - Variants can also be <code class="color-blue">name=value</code> pairs.
 - <code class="color-pink">target=x86_64</code>: Target specifier.
   - Similar to variants, but present in all packages.
@@ -193,20 +195,21 @@ Spec documentation: https://spack.readthedocs.io/en/latest/basic_usage.html#spec
 
 ---
 
-## Spack's Concretizer
+## Spack's Concretizer (= a Dependency Solver)
 
 Given a set of requirements:
 
-- System is an <code class="color-pink">debian11-x86_64</code>
-- The compiler is `%gcc@10`
-- The user wants:
+- System is a <code class="color-pink">debian11-x86_64</code>
+- The compiler provided to us is `%gcc@10`
+- Say we want:
   - Package <code>A<span class="color-cyan">@1.0:</span><span class="color-blue">+mpi</span></code>
-  - Package <code>B<span class="color-blue">+cuda</span></code>
-    - Which requires <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+cuda</span></code>
+  - Package <code>B<span class="color-blue">+cuda</span></code> which requires <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+cuda</span></code>
 
 **... Concretization**
 
-Result in what you see from `spack spec`, the actual dependency tree.
+Result in what you see from `spack spec`, the actual dependency tree. <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+mpi+cuda</span></code> will be installed.
+
+For a given set of specs, the concretizer solves all constraints while installing one unique version per package (by default).
 
 ---
 
@@ -231,12 +234,18 @@ Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture
 
 ---
 
-Spack's concretizer also considers external dependencies from the system, while Guix is completely isolated down to `libc`.
+Spack's concretizer also considers external dependencies from the system, while Guix (and Nix) is completely isolated down to `glibc`.
+
+Spack does not fully achieve reproducibility, but it helps improve it.
 
 <div class="flex justify-center">
-  <img src="./guix-v-spack.svg" class="h-80 rounded-xl">
+  <img src="./guix-v-spack.svg" class="h-65 rounded-xl">
 </div>
 
+With Spack, `gcc` is typically brought by an external system package.
+
+---
+disabled: true
 ---
 
 Spack and Guix use a **Input addressing algorithm**. Each package is installed into a unique prefix. Multiple
@@ -258,6 +267,37 @@ ncurses-6.5-dk4sla3ic3666dlgvpcj4x67tg3j7hch
 nghttp2-1.65.0-mkpt6dhlz5tmlhioknbufphupwlj5ulm
 ```
 
+---
+
+## Bootstrapping Spack on Grid'5000
+
+### Finding an external compiler
+
+The following command makes Spack aware of the <span v-mark.red="0">external system `gcc`</span>.
+
+```
+spack compiler find
+```
+
+The system `gcc` should have been configured in `~/.spack/bootstrap/config/packages.yaml`.
+
+<v-click>
+
+### Configuring
+
+The following commands will set <span v-mark.red="1">where packages will be installed / built</span>.
+
+```
+spack config --scope defaults:base add config:install_tree:root:/my-spack/spack
+spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
+```
+
+`spack config get` is a useful command to get a reconstruction of the current Spack config.
+
+`spack config blame` is useful to understand the provenance of each config attribute.
+
+</v-click>
+
 
 ---
 
@@ -276,8 +316,9 @@ $ spack install kokkos
 
 
 - 📦 Declarative -- run a single install command for everything.
-- 👥 Shareable -- share the environment file with your colleagues.
+- 👥 Shareable -- share the environment file `spack.yaml` with your colleagues.
 - 🔒 Isolated -- environments won't conflict between each other.
+- 📌 Versionable -- you can commit your `spack.yaml` alongside your project.
 
 </v-click>
 
@@ -310,7 +351,7 @@ $ spack env activate ~/myenv
 hideInToc: true
 ---
 
-The generated environment will look like the following:
+The generated environment file `spack.yaml` will look like the following:
 
 ```yaml
 # ~/myenv/spack.yaml
@@ -324,15 +365,15 @@ spack:
 - <span v-mark.red="-1"><code>specs</code>: List of packages to install.</span>
 
 Less importantly:
-- `view`: Whether the packages are exposed to the user.
-- `concretizer:unify`: Run a single pass of the "concretizer" (more on that later).
+- `view`: Use a filesystem view of the `install_tree` directory.
+- `concretizer:unify`: Any package in the environment corresponds to a single concrete spec.
 
 ---
 
-To add packages to the environment, we have 2 options:
+To add packages to the (currently activated) environment, we have 2 options:
 
-- Manually edit the `spack.yaml` file.
-- Call `spack add <spec>`, which will edit the environment for us.
+- Manually edit the `spack.yaml` file using `spack config edit` (or vim).
+- Call `spack add <spec>`, which will edit environment for us.
 
 ```ansi
 $ spack add kokkos
@@ -360,23 +401,23 @@ spack:
 
 ```mermaid {scale: 1.0}
 flowchart LR
-  A[spack add] --> B[spack concretize] --> C[spack install]
+  A[spack add spec] --> B[spack concretize] --> C[spack install]
 ```
 
 </div>
 
-Concretization checks the system environment and the requested versions of the
-packages to calculate the graph of dependencies.
+Concretization reads specs from `spack.yaml` to calculate the DAG of concrete dependencies.
 
-This will generate a `spack.lock` file that should be committed alongside the `spack.yaml`. It
-will lock every version of every package in place.
+This will generate a `spack.lock` locking every version of every package in place.
 
 ```ansi
 $ spack concretize
 
-[0;90m# To force concretization and ignore existing packages[0m
-$ spack concretize -Uf
+[0;90m# To force concretization and overwrite the spack.lock file[0m
+$ spack concretize --force
 ```
+
+You may commit the `spack.lock` alongside `spack.yaml` to improve reproducibility.
 
 ---
 
