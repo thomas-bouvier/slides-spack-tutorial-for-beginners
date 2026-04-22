@@ -171,9 +171,9 @@ Package managers are very good at managing your dependencies for you.
 
   - 🔬 Designed specifically for scientific HPC applications
   - 🔀 Handles different versions and configurations of the same package
-  - 💻 Supports **multiple compilers** simultaneously
-  - 🔥 Native **MPI** and GPU software stack support
-  - 🔄 Reproducible software stacks across different machines *
+  - 🔥 Packages are <span v-mark.red="1">compiled from source</span>
+    - Achieves the optimal performance for your hardware (CPU architecture, GPU micro-architecture, network stack)
+    - Supports multiple compilers simultaneously
   - 😃 Easy user experience, but also powerful
 
   </div>

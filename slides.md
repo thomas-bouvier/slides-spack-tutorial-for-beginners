@@ -209,7 +209,7 @@ Given a set of requirements:
 
 Result in what you see from `spack spec`, the actual dependency tree. <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+mpi+cuda</span></code> will be installed.
 
-For a given set of specs, the concretizer solves all constraints while installing one unique version per package (by default).
+For a given set of specs, the concretizer solves all constraints (SAT problem) to generate a DAG of concrete dependencies.
 
 ---
 
@@ -269,9 +269,9 @@ nghttp2-1.65.0-mkpt6dhlz5tmlhioknbufphupwlj5ulm
 
 ---
 
-## Bootstrapping Spack on Grid'5000
+## Bootstrapping Spack on Grid'5000 1/2
 
-### Finding an external compiler
+**Finding an external compiler**
 
 The following command makes Spack aware of the <span v-mark.red="0">external system `gcc`</span>.
 
@@ -281,9 +281,19 @@ spack compiler find
 
 The system `gcc` should have been configured in `~/.spack/bootstrap/config/packages.yaml`.
 
-<v-click>
 
-### Configuring
+```
+spack compiler list
+```
+
+
+
+
+---
+
+## Bootstrapping Spack on Grid'5000 2/2
+
+**Configuring some paths specific to Grid'5000**
 
 The following commands will set <span v-mark.red="1">where packages will be installed / built</span>.
 
@@ -292,11 +302,8 @@ spack config --scope defaults:base add config:install_tree:root:/my-spack/spack
 spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
 ```
 
-`spack config get` is a useful command to get a reconstruction of the current Spack config.
+`spack config get` to get a reconstruction of the current Spack config; `spack config blame` to understand the provenance of each config attribute.
 
-`spack config blame` is useful to understand the provenance of each config attribute.
-
-</v-click>
 
 
 ---
@@ -478,7 +485,7 @@ spack:
 
 
 ```
-$ spack concretize -Uf
+$ spack concretize --force
 ```
 
 
@@ -488,8 +495,7 @@ $ spack concretize -Uf
 
 ---
 
-`spack concretize` will generate the `spack.lock` alongside your `spack.yaml`.
-If skip the concretization step, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
+If you skip the concretization step `spack concretize`, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
 
 
 
@@ -528,12 +534,34 @@ pre {
 
 ---
 
+## Using a binary cache (= buildcache / mirror)
+
+Compilation can take quite some time depending on your hardware: adding a binary cache may dramatically speeds up the process.
+
+```yaml
+spack:
+  specs:
+  - kokkos
+  - cmake
+  ...
+  mirrors: # [!code ++]
+    numpex-spack-mirror:  # [!code ++]
+      url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror  # [!code ++]
+```
+
+Adding such a binary cache will influence the concretizer, which will try to reuse available binaries compatible with your specs.
+
+[Official documentation](https://spack.readthedocs.io/en/latest/binary_caches.html) on buildcaches.
+
+
+---
+
 ## Preparing a development environment
 
 
 
 ```
-$ git clone https://gitlab.inria.fr/numpex-pc5/wp3/kokkos-hello-world ~/kokkos-hello-world
+$ git clone https://github.com/thomas-bouvier/kokkos-hello-world ~/kokkos-hello-world
 $ cd ~/kokkos-hello-world
 
 $ spack env activate .

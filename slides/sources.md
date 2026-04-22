@@ -8,6 +8,8 @@
 <br/>
 
 
-- https://spack.github.io/spack-cscs2024
+- The official [Tutorial: Spack 101](https://spack-tutorial.readthedocs.io/en/latest)
 - [Spack Documentation](https://spack.readthedocs.io/en/latest)
-- [Design Considerations for Building and Running Containerized MPI Applications](https://doi.org/10.1109/CANOPIEHPC51917.2020.00010)
+- https://spack.github.io/spack-cscs2024
+
+- This [presentation](https://thomas-bouvier.github.io/slides-spack-tutorial-for-beginners)

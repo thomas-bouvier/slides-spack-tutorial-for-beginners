@@ -6,17 +6,6 @@ The webinar will be organized as a hands-on session so users can directly experi
 
 Note that this tutorial is part of the Numpex software integration strategy backed by the Exa-DI WP3 team. Our ambition is to have all Numpex-related libraries packaged with Spack, make Spack-based deployment part of every developer’s arsenal, and work with computing centers to make Spack-based user-level software deployment as frictionless as possible.
 
-## Bottlenecks
-
-Méthode :
-
-- se co à g5k
-
-Points :
-
-- binary cache
-- spack develop
-
 ## Credits
 
 Original slides by Fernando Ayats Llamas at [https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial](https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial).
