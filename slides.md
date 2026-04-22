@@ -66,7 +66,7 @@ layout: center
 
 ---
 
-## The mental model
+# The mental model
 
 These are some of the key insights to understand how Spack works:
 
@@ -79,7 +79,7 @@ These are some of the key insights to understand how Spack works:
 
 ---
 
-## Running example: Kokkos + CUDA on Grid'5000
+# Running example: Kokkos + CUDA on Grid'5000
 
 
 ```
@@ -127,7 +127,7 @@ The Spack executable and the versions for all packages are located in the Spack 
 
 ---
 
-## Finding a package
+# Finding a package
 
 Web interface: https://packages.spack.io
 
@@ -150,7 +150,7 @@ $ spack info kokkos
 ---
 
 
-## Package specs
+# Package specs
 
 ```ansi{1,2}
 $ spack spec kokkos
@@ -195,7 +195,7 @@ kokkos <span class="color-cyan">@4.5.01</span> <span class="color-blue">~aggress
 
 ---
 
-## Spack's Concretizer (= a Dependency Solver)
+# Spack's Concretizer (= a Dependency Solver)
 
 Given a set of requirements:
 
@@ -269,7 +269,7 @@ nghttp2-1.65.0-mkpt6dhlz5tmlhioknbufphupwlj5ulm
 
 ---
 
-## Bootstrapping Spack on Grid'5000 1/2
+# Bootstrapping Spack on Grid'5000 1/2
 
 **Finding an external compiler**
 
@@ -291,7 +291,7 @@ spack compiler list
 
 ---
 
-## Bootstrapping Spack on Grid'5000 2/2
+# Bootstrapping Spack on Grid'5000 2/2
 
 **Configuring some paths specific to Grid'5000**
 
@@ -308,7 +308,7 @@ spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
 
 ---
 
-## Package installation
+# Package installation
 
 So, we're going to install Kokkos and some other packages, how do we do it?
 
@@ -331,7 +331,7 @@ $ spack install kokkos
 
 ---
 
-## Spack environments
+# Spack environments
 
 From the [official documentation](https://spack.readthedocs.io/en/latest/environments.html):
 
@@ -400,7 +400,7 @@ spack:
 
 ---
 
-## Environment concretization
+# Environment concretization
 
 <br/>
 
@@ -466,7 +466,7 @@ pre {
 
 ---
 
-## Locking the concretizer arch
+# Locking the concretizer arch
 
 Locking the environment to the least common denominator of the machines to use:
 
@@ -534,7 +534,7 @@ pre {
 
 ---
 
-## Using a binary cache (= buildcache / mirror)
+# Using a binary cache (= buildcache / mirror)
 
 Compilation can take quite some time depending on your hardware: adding a binary cache may dramatically speeds up the process.
 
@@ -556,7 +556,7 @@ Adding such a binary cache will influence the concretizer, which will try to reu
 
 ---
 
-## Preparing a development environment
+# Preparing a development environment
 
 
 
@@ -570,7 +570,7 @@ $ spack spec
 
 ---
 
-## Building our project
+# Building our project
 
 ```
 $ spack install --use-build-cache only
@@ -592,7 +592,7 @@ target_link_libraries(myapp PRIVATE Kokkos::kokkos)
 
 ---
 
-## Running our App
+# Running our App
 
 For development, if we used `kokkos ~cuda`, we can run it directly. For the GPU version, go into a GPU node:
 
@@ -636,22 +636,77 @@ src: ./slides/externals.md
 ---
 
 
+
+---
+layout: center
 ---
 
-#  Writing a package definition
-
-- https://spack-tutorial.readthedocs.io/en/latest/tutorial_packaging.html
+# Advanced topics
 
 
+---
 
-- `spack create`: Generate a new package definition in the **active Spack installation**.
-- `spack edit`: Open the python file for a package.
-- `spack checksum`: Generate the checksum for some source tarball.
+# Writing a package recipe
 
+- [Official documentation](https://spack-tutorial.readthedocs.io/en/latest/tutorial_packaging.html) on package recipes.
+- `spack create -n my-package`: Generate a new package recipe.
 
+```python
+class MyPackage(CMakePackage):
+  git = "file:///path/to/repo"  # or https://...
 
+  version("main", branch="main")
 
+  depends_on("mpi")
+  depends_on("blas")
+  depends_on("cuda")
+```
 
+```yaml
+spack:
+  specs:
+  - my-package ^cuda@11 ^mpich@4 +fortran ^openblas
+```
+
+---
+
+# Developing a package 1/2
+
+The `spack develop` command
+
+```
+$ spack develop --path /path/to/my/sources my-package@main
+$ spack concretize --force
+```
+
+just updates the `spack.yaml` file:
+
+```yaml
+spack:
+  specs:
+  - my-package ^cuda@11 ^mpich@4 +fortran ^openblas
+  develop:
+    my-package:
+      spec: my-package@=main
+      path: /path/to/my/sources
+```
+
+---
+
+# Developing a package 2/2
+
+After concretization, you will see a "reserved" variant <span class="color-blue">dev_path=</span>.
+
+<code>
+my-package <span class="color-cyan">@main</span> <span class="color-blue">%gcc@13.2.0 dev_path=/path/to/my/sources</span>
+</code>
+
+and `spack install` will automatically do an overwrite install if any of the source files change (similarly to `make install`).
+
+```
+$ touch /path/to/my/sources/my-package.c
+$ spack install  # 🔁
+```
 
 
 

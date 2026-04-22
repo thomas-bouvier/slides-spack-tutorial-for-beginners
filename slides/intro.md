@@ -21,7 +21,7 @@ layout: center
 
 ---
 
-## Streamlining the setup of a scientific software stack
+# Streamlining the setup of a scientific software stack
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
@@ -48,7 +48,7 @@ layout: center
 
 ---
 
-### Gyselalib++
+# Gyselalib++
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
@@ -74,7 +74,7 @@ layout: center
 
 ---
 
-## Our target as NumPEx PC5
+# Our target as NumPEx PC5
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
@@ -110,7 +110,7 @@ layout: center
 
 ---
 
-## Classical way to deploy software
+# Classical way to deploy software
 
 - Manually installing libraries (git clone, CMake, make install, etc.)
   - ❌ Time consuming
@@ -132,7 +132,7 @@ ul {
 
 ---
 
-## Use a package manager!
+# Use a package manager!
 
 Package managers are very good at managing your dependencies for you.
 
