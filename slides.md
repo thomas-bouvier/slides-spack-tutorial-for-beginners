@@ -104,11 +104,11 @@ Host *.g5k
 ---
 
 
-To install Spack, make sure you have Python & Git; Then, we must clone the repo
+To install Spack, make sure you have Python & Git. Then, we must clone the repo on the Grid'5000 frontend:
 
 ```ansi
 [0;90m# ==> Clone Spack[0m
-$ git clone --depth=2 https://github.com/spack/spack.git
+$ git clone --depth=100 https://github.com/spack/spack.git ~/spack
 $ cd spack
 $ git checkout 7e86478 [0;90m# Locked Spack commit for the tutorial[0m
 $ cd ~
@@ -133,8 +133,8 @@ Web interface: https://packages.spack.io
 
 ```ansi
 $ spack list kokkos
-hpx-kokkos  kokkos  kokkos-kernels  kokkos-kernels-legacy  kokkos-legacy  kokkos-nvcc-wrapper  kokkos-tools  py-pennylane-lightning-kokkos  py-pykokkos-base
-[1;34m==>[0m 9 packages
+hpx-kokkos  kokkos  kokkos-fft  kokkos-kernels  kokkos-nvcc-wrapper  kokkos-tools  py-pennylane-lightning-kokkos  py-pykokkos-base
+==> 8 packages
 
 $ spack info kokkos
 [1;34mCMakePackage:   [0mkokkos
@@ -146,6 +146,7 @@ $ spack info kokkos
 [1;34mHomepage: [0mhttps://github.com/kokkos/kokkos
 ```
 
+You can also use `spack list 'py-*'`.
 
 ---
 
@@ -154,22 +155,21 @@ $ spack info kokkos
 
 ```ansi{1,2}
 $ spack spec kokkos
-[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^nghttp2[0;36m@1.65.0[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m                  ^diffutils[0;36m@3.10[0m[0;94m build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^openssl[0;36m@3.4.1[0m[0;94m~docs+shared build_system=generic certs=mozilla[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m                  ^ca-certificates-mozilla[0;36m@2025-02-25[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+ -   kokkos@4.7.03~aggressive_vectorization~atomics_bypass~cmake_lang~compiler_warnings+complex_align~cuda~debug~debug_bounds_check+debug_dualview_modify_check~deprecated_code~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=17 generator=make intel_gpu_arch=none platform=linux os=debian11 target=x86_64 %cxx=gcc@10.2.1
+ -       ^cmake@3.31.11~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=debian11 target=x86_64 %c,cxx=gcc@10.2.1
+ -           ^curl@8.18.0~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=debian11 target=x86_64 %c,cxx=gcc@10.2.1
+ -               ^nghttp2@1.67.1 build_system=autotools platform=linux os=debian11 target=x86_64 %c,cxx=gcc@10.2.1
+ -                   ^diffutils@3.12 build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@10.2.1
+ -                       ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=debian11 target=x86_64 %c=gcc@10.2.1
+ -               ^openssl@3.6.1~docs+shared build_system=generic certs=mozilla platform=linux os=debian11 target=x86_64 %c,cxx=gcc@10.2.1
+ -                   ^ca-certificates-mozilla@2026-03-19 build_system=generic platform=linux os=debian11 target=x86_64 
 ...
 ```
-
-
 
 Instead of package names, Spack uses **package specs**: a spec is like a name, but it has a version, compiler, architecture, and build options associated with it.
 
 <code>
-kokkos <span class="color-cyan">@4.5.01</span> <span class="color-blue">~aggressive_vectorization build_type=Release</span> ...
+kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggressive_vectorization ~atomics_bypass</span> ...
 </code>
 
 Going from a package name to such a concrete spec is called **concretizing**.
@@ -179,19 +179,19 @@ Going from a package name to such a concrete spec is called **concretizing**.
 Spec documentation: https://spack.readthedocs.io/en/latest/package_fundamentals.html#specs-dependencies
 
 <code>
-kokkos <span class="color-cyan">@4.5.01</span> <span class="color-blue">~aggressive_vectorization build_type=Release</span> ...
+kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggressive_vectorization ~atomics_bypass</span> ...
 </code>
 
-- <code class="color-cyan">@4.5.01</code>: [Version specifier](https://spack.readthedocs.io/en/latest/basic_usage.html#version-specifier).
+- <code class="color-cyan">@4.7.03</code>: [Version specifier](https://spack.readthedocs.io/en/latest/basic_usage.html#version-specifier).
   - Spack concretizes packages to a fixed version <code class="color-cyan">@X.Y.Z</code>.
   - As a user, you can specify a version range, e.g:
-    - <code class="color-cyan">@4.5:</code>: Take <code class="color-cyan">@4.5.0</code>, <code class="color-cyan">@4.5.1</code>, etc. / <code class="color-cyan">@:5</code>: Up to v5 included <code class="color-cyan">@5.0.0</code>, <code class="color-cyan">@5.1.0</code>, etc.
+    - <code class="color-cyan">@4.7:</code>: Take <code class="color-cyan">@4.7.00</code>, <code class="color-cyan">@4.7.01</code>, etc. / <code class="color-cyan">@:5</code>: Up to v5 included <code class="color-cyan">@5.0.0</code>, <code class="color-cyan">@5.1.0</code>, etc.
 - <code class="color-blue">~aggressive_vectorization</code>: Variant specifier.
   - <code class="color-blue">+</code> means the feature is enabled / <code class="color-blue">~</code> means the feature is disabled.
   - Variants can also be <code class="color-blue">name=value</code> pairs.
 - <code class="color-pink">target=x86_64</code>: Target specifier.
   - Similar to variants, but present in all packages.
-  - Allows you to target some compiler microarhitecture, e.g. <code class="color-pink">target=haswell</code>
+- <code class="color-pink">%c,cxx=gcc@10.2.1</code>: Dependencies on compilers are also modeled by specs.
 
 ---
 
@@ -211,7 +211,102 @@ Result in what you see from `spack spec`, the actual dependency tree. <code>A<sp
 
 For a given set of specs, the concretizer solves all constraints (SAT problem) to generate a DAG of concrete dependencies.
 
+
 ---
+
+# Concretizing `kokkos@5`
+
+```
+$ spack spec kokkos@5     
+==> Error: failed to concretize `kokkos@5` for the following reasons:
+     1. kokkos: '%gcc@:10.3' conflicts with '@5:'
+     2. kokkos: '%gcc@:10.3' conflicts with '@5:'
+        required because conflict is triggered when %gcc@:10.3 
+          required because gcc-runtime depends on gcc 
+          required because kokkos@5 requested explicitly
+```
+
+The concretizer cannot solve the set of constraints needed by `kokkos@5`: a recent `gcc` is needed.
+
+```
+$ spack compiler list 
+==> Available compilers
+-- gcc debian11-x86_64 ------------------------------------------
+[e]  gcc@10.2.1
+```
+
+
+---
+
+Spack's concretizer also considers external dependencies from the system, while Guix (and Nix) is completely isolated down to `glibc`.
+
+Spack does not fully achieve reproducibility, but it helps improve it.
+
+<div class="flex justify-center">
+  <img src="./guix-v-spack.svg" class="h-65 rounded-xl">
+</div>
+
+With Spack, `gcc` is typically brought by an external system package.
+
+
+---
+
+# Loading the compiler from the compute center
+
+
+Let's inspect modules made available to us on Grid'5000:
+
+```
+$ module av                
+---------------------------------------------------------------------------------------------- /grid5000/spack/v1/share/spack/modules/linux-debian11-x86_64_v2 ----------------------------------------------------------------------------------------------
+   gcc/10.4.0_gcc-10.4.0             intel-oneapi-vtune/2022.3.0_gcc-10.4.0               pmix/4.1.2_gcc-10.4.0                                         tau/2.32_gcc-10.4.0-openmpi
+   gcc/12.2.0_gcc-10.4.0             intel-oneapi-vtune/2023.0.0_gcc-10.4.0        (D)    py-numpy/1.23.3_gcc-10.4.0-intelmpi-python-3.9.13             ucx/1.13.1_gcc-10.4.0-compat
+   gcc/13.2.0_gcc-10.4.0      (D)    julia/1.8.2_gcc-10.4.0                               py-numpy/1.24.2_gcc-10.4.0-python-3.9.13               (D)    ucx/1.13.1_gcc-10.4.0                   (D)
+```
+
+```
+$ module load gcc/13
+```
+
+
+The following command makes Spack aware of the <span v-mark.red="0">external system `gcc`</span>.
+
+```
+spack compiler find
+spack compiler list
+```
+
+The system `gcc` should have been configured in `~/.spack/packages.yaml`.
+
+
+---
+
+```ansi{1,2}
+$ spack spec kokkos@5
+ -   kokkos@5.1.0~aggressive_vectorization~atomics_bypass~cmake_lang+complex_align~cuda~debug~debug_bounds_check+deprecated_code~hip_relocatable_device_code~hpx~hwloc~ipo~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cxxstd=20 generator=make intel_gpu_arch=none platform=linux os=debian11 target=x86_64 %cxx=gcc@13.2.0
+ -       ^cmake@3.31.11~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=debian11 target=x86_64 %c,cxx=gcc@13.2.0
+ -           ^curl@8.18.0~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=debian11 target=x86_64 %c,cxx=gcc@13.2.0
+ -               ^nghttp2@1.67.1 build_system=autotools platform=linux os=debian11 target=x86_64 %c,cxx=gcc@13.2.0
+ -                   ^diffutils@3.12 build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -                       ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -               ^openssl@3.6.1~docs+shared build_system=generic certs=mozilla platform=linux os=debian11 target=x86_64 %c,cxx=gcc@13.2.0
+ -                   ^ca-certificates-mozilla@2026-03-19 build_system=generic platform=linux os=debian11 target=x86_64 
+ -                   ^perl@5.42.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -                       ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=debian11 target=x86_64 %c,cxx=gcc@13.2.0
+ -                       ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -                       ^gdbm@1.26 build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -                           ^readline@8.3 build_system=autotools patches:=21f0a03 platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+```
+
+The concretization is now successfull for `kokkos@5`.
+
+Notice the <code class="color-pink">`target=x86_64 %c=gcc@13.2.0`</code> in the concretized specs.
+
+
+---
+disabled: true
+---
+
 
 ```ansi{1,2,9}
 $ spack spec kokkos +cuda cuda_arch=120
@@ -232,17 +327,6 @@ $ spack spec kokkos +cuda cuda_arch=120
 
 Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture.
 
----
-
-Spack's concretizer also considers external dependencies from the system, while Guix (and Nix) is completely isolated down to `glibc`.
-
-Spack does not fully achieve reproducibility, but it helps improve it.
-
-<div class="flex justify-center">
-  <img src="./guix-v-spack.svg" class="h-65 rounded-xl">
-</div>
-
-With Spack, `gcc` is typically brought by an external system package.
 
 ---
 disabled: true
@@ -267,33 +351,11 @@ ncurses-6.5-dk4sla3ic3666dlgvpcj4x67tg3j7hch
 nghttp2-1.65.0-mkpt6dhlz5tmlhioknbufphupwlj5ulm
 ```
 
----
-
-# Bootstrapping Spack on Grid'5000 1/2
-
-**Finding an external compiler**
-
-The following command makes Spack aware of the <span v-mark.red="0">external system `gcc`</span>.
-
-```
-spack compiler find
-```
-
-The system `gcc` should have been configured in `~/.spack/bootstrap/config/packages.yaml`.
-
-
-```
-spack compiler list
-```
-
-
-
 
 ---
 
-# Bootstrapping Spack on Grid'5000 2/2
+# Bootstrapping Spack on Grid'5000
 
-**Configuring some paths specific to Grid'5000**
 
 The following commands will set <span v-mark.red="1">where packages will be installed / built</span>.
 
@@ -302,7 +364,9 @@ spack config --scope defaults:base add config:install_tree:root:/my-spack/spack
 spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
 ```
 
-`spack config get` to get a reconstruction of the current Spack config; `spack config blame` to understand the provenance of each config attribute.
+`spack config get` is useful to get a reconstruction of the current Spack config.
+
+`spack config blame` is useful to understand the provenance of each config attribute.
 
 
 

@@ -21,15 +21,15 @@ layout: center
 
 ---
 
-# Streamlining the setup of a scientific software stack
+# Streamlining the setup of a complex stack
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
 
   **How to install these dependencies?**
-  - Modular application with build or link-type dependencies, multiple languages, and various build tools
+  - <span v-mark.red="1">Complex and modular application</span> with build or link-type dependencies, multiple languages, and various build tools
   - Different systems, environments, local machines or HPC clusters
-  - Hard to be an expert across the entire toolchain; we want a solution that's easy enough
+  - Hard to be an expert across the entire toolchain; we want a solution that's <span v-mark.red="1">easy</span> enough
 
   </div>
 
@@ -48,9 +48,9 @@ layout: center
 
 ---
 
-# Gyselalib++
+# Gyselalib++: a complex scientific stack
 
-<div class="grid grid-cols-[1fr_max-content]">
+<div class="grid grid-cols-[70%_30%] gap-6">
   <div>
 
   - Gyselalib builds on top of domain expert libraries
@@ -58,15 +58,15 @@ layout: center
     - Libraries have many compile options
     - Some are usually available on clusters but not always built with required options
     - Some are very unlikely available
-  - Non exhaustive list of direct dependencies: DDC, Eigen, Koliop, Kokkos, kokkos-fft, Kokkos Kernels, Google test, Ginkgo, MPI, PDI, NetCDF, HDF5, Dask, Xarray, h5py, matplotlib...
+  - Non exhaustive list of direct dependencies: `DDC`, `Eigen`, `Koliop`, `Kokkos`, `kokkos-fft`, `Kokkos Kernels`, `Ginkgo`, `MPI`, `PDI`, `NetCDF`, `HDF5`, `Dask`, `Xarray`, `h5py`, `matplotlib`...
 
   </div>
 
   <div class="mr-20 mt-10">
 
   <image class="flex flex-col items-center">
-    <img width="150px" src="https://gyselax.github.io/media/GYSELA_simu_hu2cd80fa9de07f75943f96ae0efbe83ce_1057076_1200x0_resize_lanczos_2.png" >
-    <strong>Modeling turbulence in tokamak plasmas</strong>
+    <img class="w-full" src="https://gyselax.github.io/media/GYSELA_simu_hu2cd80fa9de07f75943f96ae0efbe83ce_1057076_1200x0_resize_lanczos_2.png" >
+    <strong class="text-center">Modeling turbulence in tokamak plasmas</strong>
   </image>
 
   </div>
