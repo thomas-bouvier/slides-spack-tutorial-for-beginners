@@ -21,7 +21,7 @@ layout: center
 
 ---
 
-# Streamlining the setup of a complex stack
+## Streamlining the setup of a complex stack
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
@@ -48,12 +48,13 @@ layout: center
 
 ---
 
-# Gyselalib++: a complex scientific stack
+## Gyselalib++: a complex scientific stack
 
 <div class="grid grid-cols-[70%_30%] gap-6">
   <div>
 
   - Gyselalib builds on top of domain expert libraries
+
     - With heterogeneous languages: CUDA, HIP, SYCL, C++, C, Fortran, Python
     - Libraries have many compile options
     - Some are usually available on clusters but not always built with required options
@@ -74,7 +75,7 @@ layout: center
 
 ---
 
-# Our target as NumPEx PC5
+## Our target as NumPEx PC5
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
@@ -110,7 +111,7 @@ layout: center
 
 ---
 
-# Classical way to deploy software
+## Classical way to deploy software
 
 - Manually installing libraries (git clone, CMake, make install, etc.)
   - ❌ Time consuming
@@ -132,7 +133,7 @@ ul {
 
 ---
 
-# Use a package manager!
+## Use a package manager!
 
 Package managers are very good at managing your dependencies for you.
 
@@ -163,7 +164,7 @@ Package managers are very good at managing your dependencies for you.
 
 ---
 
-# Why Spack for HPC?
+## Why Spack for HPC?
 
 <div class="grid grid-cols-[1fr_max-content]">
 

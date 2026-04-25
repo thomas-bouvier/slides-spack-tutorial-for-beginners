@@ -66,7 +66,7 @@ layout: center
 
 ---
 
-# The mental model
+## The mental model
 
 These are some of the key insights to understand how Spack works:
 
@@ -79,7 +79,7 @@ These are some of the key insights to understand how Spack works:
 
 ---
 
-# Running example: Kokkos + CUDA on Grid'5000
+## Running example: Kokkos → a Gysela app on Grid'5000
 
 
 ```
@@ -127,7 +127,7 @@ The Spack executable and the versions for all packages are located in the Spack 
 
 ---
 
-# Finding a package
+## Finding a package
 
 Web interface: https://packages.spack.io
 
@@ -151,7 +151,7 @@ You can also use `spack list 'py-*'`.
 ---
 
 
-# Package specs
+## Package specs
 
 ```ansi{1,2}
 $ spack spec kokkos
@@ -195,7 +195,7 @@ kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggress
 
 ---
 
-# Spack's Concretizer (= a Dependency Solver)
+## Spack's Concretizer (= a Dependency Solver)
 
 Given a set of requirements:
 
@@ -214,7 +214,7 @@ For a given set of specs, the concretizer solves all constraints (SAT problem) t
 
 ---
 
-# Concretizing `kokkos@5`
+## Concretizing `kokkos@5`
 
 ```
 $ spack spec kokkos@5     
@@ -251,7 +251,7 @@ With Spack, `gcc` is typically brought by an external system package.
 
 ---
 
-# Loading the compiler from the compute center
+## Loading the compiler from the compute center
 
 
 Let's inspect modules made available to us on Grid'5000:
@@ -331,7 +331,7 @@ Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture
 
 ---
 
-# Bootstrapping Spack on Grid'5000
+## Bootstrapping Spack on Grid'5000
 
 
 `spack config get` is useful to get a reconstruction of the current Spack config.
@@ -365,7 +365,7 @@ $ spack config --scope defaults:base add config:install_tree:root:/my-spack/spac
 
 ---
 
-# Package installation
+## Package installation
 
 So, we're going to install Kokkos and some other packages, how do we do it?
 
@@ -397,7 +397,7 @@ $ spack load kokkos
 
 ---
 
-# Spack environments
+## Spack environments
 
 From the [official documentation](https://spack.readthedocs.io/en/latest/environments.html):
 
@@ -471,13 +471,16 @@ spack:
 
 ---
 
-# Get a complete environment for my Gysela app
+## Get a complete environment for my Gysela app
 
 Say I am developing a C++ app in the Gysela system:
 
 - Demonstrating I/O operations ;
 - Testing the CPU performance scaling for 5D particle distribution functions ;
-- Available at https://github.com/gyselax/gysela-mini-app_io.
+
+```
+$ git clone -b pycall_deisa_moments https://github.com/gyselax/gysela-mini-app_io
+```
 
 **... the package for my app is not in Spack yet**
 
@@ -489,7 +492,7 @@ Say I am developing a C++ app in the Gysela system:
 The work has been done:
 
 ```
-curl https://raw.githubusercontent.com/thomas-bouvier/my-spack-envs/refs/heads/main/generic/gysela-mini-app-io/spack.yaml -o ~/spack/var/spack/environments/gysela-io/spack.yaml
+$ curl https://raw.githubusercontent.com/thomas-bouvier/my-spack-envs/refs/heads/main/generic/gysela-mini-app-io/spack.yaml -o ~/spack/var/spack/environments/gysela-io/spack.yaml
 ```
 
 </v-click>
@@ -497,7 +500,7 @@ curl https://raw.githubusercontent.com/thomas-bouvier/my-spack-envs/refs/heads/m
 
 ---
 
-# Environment concretization
+## Environment concretization
 
 <br/>
 
@@ -535,38 +538,38 @@ If you skip the concretization step `spack concretize`, `spack install` will con
 {
   "_meta": {
     "file-type": "spack-lockfile",
-    "lockfile-version": 6,
-    "specfile-version": 5
-  },
-  "spack": {
-    "version": "1.0.0.dev0",
-    "type": "git",
-    "commit": "199133fca402022a27002a54f25d735e7a27cce5"
+    "lockfile-version": 6
   },
   "roots": [
     {
       "hash": "ylsnhrukizj6kfprn5rbawyaophnkwgw",
       "spec": "kokkos"
-    }
-  ],
-  "concrete_specs": {
-    "ylsnhrukizj6kfprn5rbawyaophnkwgw": {
-      "name": "kokkos",
 // ...
 ```
 
-Finally! Let's install our specs:
+Finally! Let's install our specs using `spack install`
 
-```
-$ spack install
+
+
+
+---
+
+## Using a binary cache (= buildcache / mirror)
+
+Compilation can take quite some time depending on your hardware: adding a binary cache may dramatically speeds up the process.
+
+```yaml
+spack:
+  specs:
+  - ...
+  mirrors: # [!code ++]
+    numpex-spack-mirror:  # [!code ++]
+      url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror  # [!code ++]
 ```
 
-<style>
-pre {
-  font-size: 0.5rem !important;
-  line-height: 0.5rem !important;
-}
-</style>
+Adding such a binary cache will influence the concretizer, which will try to reuse available binaries compatible with your specs.
+
+[Official documentation](https://spack.readthedocs.io/en/latest/binary_caches.html) on buildcaches.
 
 
 
@@ -574,7 +577,7 @@ pre {
 ---
 
 ```ansi {1,2}
-fayatsllamas@chifflot-2 $ spack spec
+tbouvier@chifflot-2 $ spack spec
 [0;90m - [0m  cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-debian11-skylake_avx512[0m
 [0;90m - [0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-debian11-skylake_avx512[0m
 [0;90m - [0m      ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl[0m[0;35m arch=linux-debian11-skylake_avx512[0m
@@ -601,7 +604,7 @@ fayatsllamas@chifflot-2 $ spack spec
 <br/>
 
 - <code class="text-pink">arch=linux-debian11-skylake_avx512</code> When concretized on the machine `chifflot-2`.
-- <code class="text-pink">arch=linux-ubuntu24.04-icelake</code> When concretized on my laptop.
+- <code class="text-pink">arch=linux-ubuntu24.04-icelake</code> When concretized on a laptop running Ubuntu.
 
 <style>
 pre {
@@ -609,20 +612,17 @@ pre {
 }
 </style>
 
+
 ---
 
-# Locking the concretizer arch
+## Locking the concretizer arch
 
 Locking the environment to the least common denominator of the machines to use:
 
 ```yaml
 spack:
   specs:
-  - kokkos
-  - cmake
-  view: true
-  concretizer:
-    unify: true
+  - ...
   packages: # [!code ++]
     all: # [!code ++]
       require: target=x86_64 # [!code ++]
@@ -633,47 +633,40 @@ spack:
 $ spack concretize --force
 ```
 
+This forces Spack to produce more portable binaries (not specific to a micro-architecture).
+
+This allows to reuse binaries from buildcaches more often.
 
 
 ---
 
-# Using a binary cache (= buildcache / mirror)
-
-Compilation can take quite some time depending on your hardware: adding a binary cache may dramatically speeds up the process.
-
-```yaml
-spack:
-  specs:
-  - kokkos
-  - cmake
-  ...
-  mirrors: # [!code ++]
-    numpex-spack-mirror:  # [!code ++]
-      url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror  # [!code ++]
-```
-
-Adding such a binary cache will influence the concretizer, which will try to reuse available binaries compatible with your specs.
-
-[Official documentation](https://spack.readthedocs.io/en/latest/binary_caches.html) on buildcaches.
-
-
----
-
-After installing packages, we can use the spack find command to query which packages are installed.
-
-The spack find command can also take a -d flag, which can show dependency information.
-
-We can also use the spack graph command to view the entire DAG as a graph.
-
----
-
-# Building our project
+After installing packages, we can use the `spack find [spec]` command to query which packages are installed.
 
 ```
-$ spack install --use-build-cache only
-...
-$ cmake -B build
-$ cmake --build build
+$ spack find                 
+==> In environment gysela-io (28 root specs)
+[+] cmake@3.30             [+] kokkos-fft@0.4 host_backend=fftw-serial  [+] mpi                                  [+] pdiplugin-decl-netcdf@1.10.1:1.10+mpi  [+] pdiplugin-trace@1.10.1:1.10  [+] py-imageio@2.35     [+] py-pyyaml@6.0
+[+] ginkgo@1.9             [+] kokkos-kernels@4.7                       [+] paraconf@1.0                         [+] pdiplugin-mpi@1.10.1:1.10              [+] py-bokeh                     [+] py-matplotlib@3.9   [+] py-scipy@1.14
+[+] googletest@1.14+gmock  [+] kokkos-tools                             [+] pdi@1.10.1:1.10                      [+] pdiplugin-pycall@1.10.1:1.10           [+] py-deisa-dask                [+] py-netcdf4@1.7+mpi  [+] py-sympy@1.13
+[+] kokkos@4.7+serial      [+] lapack                                   [+] pdiplugin-decl-hdf5@1.10.1:1.10+mpi  [+] pdiplugin-set-value@1.10.1:1.10        [+] py-h5py@3.12                 [+] py-numpy@2.1        [+] py-xarray@2024.7
+
+-- linux-debian11-x86_64 / %c,cxx,fortran=gcc@13.2.0 ------------
+py-scipy@1.14.1            ...
+```
+
+The `spack find` command can also take a `-d` flag, which can show dependency information.
+
+We can also use the `spack graph [spec]` command to view the entire DAG as a graph.
+
+---
+
+## Building our Gysela app
+
+We build our app as usual, but from with the activated Spack environment:
+
+```
+$ cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=external/gyselalibxx/toolchains/cpu.spack.gyselalibxx_env/toolchain.cmake
+$ cmake --build build -j 4
 ```
 
 <br/>
@@ -689,7 +682,7 @@ target_link_libraries(myapp PRIVATE Kokkos::kokkos)
 
 ---
 
-# Running our App
+## Running our App
 
 For development, if we used `kokkos ~cuda`, we can run it directly. For the GPU version, go into a GPU node:
 
@@ -707,13 +700,23 @@ $ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special
   -I -p [0;32mchifflot[0m -l /host=1,walltime=0:05:00
 ```
 
-```
-$ ./build/myapp
-```
 
 ---
 
-# Recommended workflow
+## Compilation errors
+
+If you get a compilation error for a specific Spack package, [please open an issue](https://github.com/spack/spack-packages/issues) about it.
+
+If the package has a maintainer, they will be notified about your issue.
+
+<div class="flex flex-row justify-center justify-items-center gap-10 mt-10">
+  <img src="../issue.png">
+</div>
+
+
+---
+
+## Recommended workflow
 
 For local development:
 - Start with a `spack.yaml`
@@ -737,7 +740,7 @@ src: ./slides/externals.md
 
 ---
 
-# Writing a package recipe
+## Writing a package recipe
 
 - [Official documentation](https://spack-tutorial.readthedocs.io/en/latest/tutorial_packaging.html) on package recipes.
 - `spack create -n my-package`: Generate a new package recipe.
@@ -761,7 +764,7 @@ spack:
 
 ---
 
-# Developing a package 1/2
+## Developing a package 1/2
 
 The `spack develop` command
 
@@ -784,7 +787,7 @@ spack:
 
 ---
 
-# Developing a package 2/2
+## Developing a package 2/2
 
 After concretization, you will see a "reserved" variant <span class="color-blue">dev_path=</span>.
 
