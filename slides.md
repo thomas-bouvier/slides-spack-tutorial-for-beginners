@@ -272,8 +272,8 @@ $ module load gcc/13
 The following command makes Spack aware of the <span v-mark.red="0">external system `gcc`</span>.
 
 ```
-spack compiler find
-spack compiler list
+$ spack compiler find
+$ spack compiler list
 ```
 
 The system `gcc` should have been configured in `~/.spack/packages.yaml`.
@@ -328,46 +328,39 @@ $ spack spec kokkos +cuda cuda_arch=120
 Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture.
 
 
----
-disabled: true
----
-
-Spack and Guix use a **Input addressing algorithm**. Each package is installed into a unique prefix. Multiple
-packages with same name, but **different specs** may be "installed" at the same time.
-
-We manage which packages are brought into scope with `spack load` or Spack environments.
-
-
-```
-$ ls -1 spack-tuto/opt/spack/linux-x86_64/
-
-ca-certificates-mozilla-2025-02-25-czmj7w6shuex2krckv6zjb353xzg24g2
-cmake-3.31.6-elkqc2tem57cee4zugaonlhrb2u3zhx6
-compiler-wrapper-1.0-5rpljyjshkdolviqkg4q5ou4xdbvtxw2
-curl-8.11.1-zw6anfi2jqysycmgwvwmkt5tupcfdaxe
-gcc-runtime-10.2.1-ju5hltznpg4miborezunlvf67ahpqzhm
-gmake-4.4.1-c5a2htejzzhhpsxcopn7y3zchmfs2hab
-ncurses-6.5-dk4sla3ic3666dlgvpcj4x67tg3j7hch
-nghttp2-1.65.0-mkpt6dhlz5tmlhioknbufphupwlj5ulm
-```
-
 
 ---
 
 # Bootstrapping Spack on Grid'5000
 
 
-The following commands will set <span v-mark.red="1">where packages will be installed / built</span>.
-
-```
-spack config --scope defaults:base add config:install_tree:root:/my-spack/spack
-spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
-```
-
 `spack config get` is useful to get a reconstruction of the current Spack config.
 
 `spack config blame` is useful to understand the provenance of each config attribute.
 
+The following command will set <span v-mark.red="1">where packages will be built</span>.
+
+```
+$ spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
+```
+
+You can also edit the config file manually as follows:
+
+```
+$ spack config --scope defaults:base edit config
+```
+
+
+<v-click>
+
+You may set the `install_tree` to [Group Storage](https://www.grid5000.fr/w/Group_Storage) over NFS:
+
+```
+$ ln - s /srv/storage/my-group-storage@storage1.lyon.grid5000.fr/ /my-spack
+$ spack config --scope defaults:base add config:install_tree:root:/my-spack/spack
+```
+
+</v-click>
 
 
 ---
@@ -381,15 +374,24 @@ $ spack install kokkos
 ...
 ```
 
+```
+Progress: 19/21  +/-: 4 jobs  /: filter  v: logs  n/p: next/prev
+```
+
+Once installed, you can make the package available with:
+
+```
+$ spack load kokkos
+```
+
 <v-click>
 
 ...but let's use <span v-mark.red="1">environments</span> instead!
 
 
-- 📦 Declarative -- run a single install command for everything.
-- 👥 Shareable -- share the environment file `spack.yaml` with your colleagues.
+- 📦 Multiple root packages -- run a single install command for all the packages you need.
+- 👥 Shareable / versionable -- share the environment file `spack.yaml` with your colleagues.
 - 🔒 Isolated -- environments won't conflict between each other.
-- 📌 Versionable -- you can commit your `spack.yaml` alongside your project.
 
 </v-click>
 
@@ -411,21 +413,26 @@ An environment is used to group a set of specs intended for some purpose to be b
 <br/>
 
 ```ansi
-$ spack env create --dir /tmp	/test
-[1;34m==>[0m Created independent environment in: [0;36m/tmp/test[0m
-[1;34m==>[0m Activate with: [0;36mspack env activate /tmp/test[0m
+$ spack env create gysela-io
+==> Created environment gysela-io in: /home/tbouvier/spack/var/spack/environments/gysela-io
+==> Activate with: spack env activate gysela-io
 
-$ spack env activate ~/myenv
+$ spack env activate gysela-io
 ```
+
+`spack env status` is usefull to check which environment in currently activated.
+
 
 ---
 hideInToc: true
 ---
 
-The generated environment file `spack.yaml` will look like the following:
+`spack config edit` allows to open the environment file `spack.yaml`.
+
+It looks as follows:
 
 ```yaml
-# ~/myenv/spack.yaml
+# ~/spack/var/spack/environments/gysela-io/spack.yaml
 spack:
   specs: []
   view: true
@@ -448,7 +455,7 @@ To add packages to the (currently activated) environment, we have 2 options:
 
 ```ansi
 $ spack add kokkos
-[1;34m==>[0m Adding kokkos to environment /home/ubuntu/myenv
+[1;34m==>[0m Adding kokkos to environment gysela-io
 ```
 
 <br/>
@@ -464,6 +471,32 @@ spack:
 
 ---
 
+# Get a complete environment for my Gysela app
+
+Say I am developing a C++ app in the Gysela system:
+
+- Demonstrating I/O operations ;
+- Testing the CPU performance scaling for 5D particle distribution functions ;
+- Available at https://github.com/gyselax/gysela-mini-app_io.
+
+**... the package for my app is not in Spack yet**
+
+- Actually `py-gysela` is not even available yet (https://packages.spack.io/)
+- We have to declare all dependencies appearing in our sources in a Spack environment.
+
+<v-click>
+
+The work has been done:
+
+```
+curl https://raw.githubusercontent.com/thomas-bouvier/my-spack-envs/refs/heads/main/generic/gysela-mini-app-io/spack.yaml -o ~/spack/var/spack/environments/gysela-io/spack.yaml
+```
+
+</v-click>
+
+
+---
+
 # Environment concretization
 
 <br/>
@@ -472,7 +505,7 @@ spack:
 
 ```mermaid {scale: 1.0}
 flowchart LR
-  A[spack add spec] --> B[spack concretize] --> C[spack install]
+  A[spack.yaml] --> B[spack concretize] --> C[spack install]
 ```
 
 </div>
@@ -489,6 +522,54 @@ $ spack concretize --force
 ```
 
 You may commit the `spack.lock` alongside `spack.yaml` to improve reproducibility.
+
+
+---
+
+If you skip the concretization step `spack concretize`, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
+
+
+
+```json
+// spack.lock
+{
+  "_meta": {
+    "file-type": "spack-lockfile",
+    "lockfile-version": 6,
+    "specfile-version": 5
+  },
+  "spack": {
+    "version": "1.0.0.dev0",
+    "type": "git",
+    "commit": "199133fca402022a27002a54f25d735e7a27cce5"
+  },
+  "roots": [
+    {
+      "hash": "ylsnhrukizj6kfprn5rbawyaophnkwgw",
+      "spec": "kokkos"
+    }
+  ],
+  "concrete_specs": {
+    "ylsnhrukizj6kfprn5rbawyaophnkwgw": {
+      "name": "kokkos",
+// ...
+```
+
+Finally! Let's install our specs:
+
+```
+$ spack install
+```
+
+<style>
+pre {
+  font-size: 0.5rem !important;
+  line-height: 0.5rem !important;
+}
+</style>
+
+
+
 
 ---
 
@@ -554,48 +635,6 @@ $ spack concretize --force
 
 
 
-
-
-
----
-
-If you skip the concretization step `spack concretize`, `spack install` will concretize for each run (which takes time), and won't save it to the `spack.lock`.
-
-
-
-```json
-// spack.lock
-{
-  "_meta": {
-    "file-type": "spack-lockfile",
-    "lockfile-version": 6,
-    "specfile-version": 5
-  },
-  "spack": {
-    "version": "1.0.0.dev0",
-    "type": "git",
-    "commit": "199133fca402022a27002a54f25d735e7a27cce5"
-  },
-  "roots": [
-    {
-      "hash": "ylsnhrukizj6kfprn5rbawyaophnkwgw",
-      "spec": "kokkos"
-    }
-  ],
-  "concrete_specs": {
-    "ylsnhrukizj6kfprn5rbawyaophnkwgw": {
-      "name": "kokkos",
-// ...
-```
-
-<style>
-pre {
-  font-size: 0.5rem !important;
-  line-height: 0.5rem !important;
-}
-</style>
-
-
 ---
 
 # Using a binary cache (= buildcache / mirror)
@@ -620,17 +659,11 @@ Adding such a binary cache will influence the concretizer, which will try to reu
 
 ---
 
-# Preparing a development environment
+After installing packages, we can use the spack find command to query which packages are installed.
 
+The spack find command can also take a -d flag, which can show dependency information.
 
-
-```
-$ git clone https://github.com/thomas-bouvier/kokkos-hello-world ~/kokkos-hello-world
-$ cd ~/kokkos-hello-world
-
-$ spack env activate .
-$ spack spec
-```
+We can also use the spack graph command to view the entire DAG as a graph.
 
 ---
 
@@ -692,21 +725,15 @@ For advanced users:
 
 
 ---
-src: ./slides/compiler.md
----
-
----
-src: ./slides/externals.md
----
-
-
-
----
 layout: center
 ---
 
 # Advanced topics
 
+
+---
+src: ./slides/externals.md
+---
 
 ---
 
