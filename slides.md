@@ -303,29 +303,6 @@ The concretization is now successfull for `kokkos@5`.
 Notice the <code class="color-pink">`target=x86_64 %c=gcc@13.2.0`</code> in the concretized specs.
 
 
----
-disabled: true
----
-
-
-```ansi{1,2,9}
-$ spack spec kokkos +cuda cuda_arch=120
-[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-...
-[0;32m[+][0m          ^ncurses[0;36m@6.5[0m[0;94m~symlinks+termlib abi=none build_system=autotools patches=7a351bc[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;90m - [0m      ^cuda[0;36m@12.8.0[0m[0;94m~allow-unsupported-compilers~dev build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^libxml2[0;36m@2.13.5[0m[0;94m~http+pic~python+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^libiconv[0;36m@1.17[0m[0;94m build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^xz[0;36m@5.6.3[0m[0;94m~pic build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[e][0m      ^gcc[0;36m@13.3.0[0m[0;94m~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran'[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-...
-```
-
-Now we build the **CUDA-enabled Kokkos** tweaked for the `120` CUDA architecture.
 
 
 
@@ -471,6 +448,31 @@ spack:
 
 ---
 
+We could build a CUDA-enabled kokkos instead:
+
+
+```ansi{1,2,9}
+$ spack add kokkos +cuda cuda_arch=120
+[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+...
+[0;32m[+][0m          ^ncurses[0;36m@6.5[0m[0;94m~symlinks+termlib abi=none build_system=autotools patches=7a351bc[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;90m - [0m      ^cuda[0;36m@12.8.0[0m[0;94m~allow-unsupported-compilers~dev build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m          ^libxml2[0;36m@2.13.5[0m[0;94m~http+pic~python+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^libiconv[0;36m@1.17[0m[0;94m build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[+][0m              ^xz[0;36m@5.6.3[0m[0;94m~pic build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+[0;32m[e][0m      ^gcc[0;36m@13.3.0[0m[0;94m~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran'[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+...
+```
+
+
+
+
+---
+
 ## Get a complete environment for my Gysela app
 
 Say I am developing a C++ app in the Gysela system:
@@ -479,12 +481,12 @@ Say I am developing a C++ app in the Gysela system:
 - Testing the CPU performance scaling for 5D particle distribution functions ;
 
 ```
-$ git clone -b pycall_deisa_moments https://github.com/gyselax/gysela-mini-app_io
+$ git clone --recursive https://github.com/thomas-bouvier/gysela-mini-app_io
 ```
 
 **... the package for my app is not in Spack yet**
 
-- Actually `py-gysela` is not even available yet (https://packages.spack.io/)
+- Actually, `py-gysela` is not even available in Spack (https://packages.spack.io/)
 - We have to declare all dependencies appearing in our sources in a Spack environment.
 
 <v-click>
@@ -547,9 +549,49 @@ If you skip the concretization step `spack concretize`, `spack install` will con
 // ...
 ```
 
-Finally! Let's install our specs using `spack install`
+---
+
+## Where to install our packages?
+
+We are ready to run `spack install`. Where to do it?
+
+If depends on the computing center. <span v-mark.red="1">By default, you should compile on a compute node</span>.
+
+```ansi
+[0;90m# Interactive shell on a [0;33mCPU[0m partition[0m
+$ oarsub --project lab-2026-numpex-spack-tutorial -t allowed=special \
+  -I -p [0;33mchiclet[0m -l host=1/core=4,walltime=2:00:00
+
+[0;90m# Interactive shell on a [0;32mGPU[0m node[0m
+$ oarsub --project lab-2026-numpex-spack-tutorial -t allowed=special \
+  -I -p [0;32mchifflot[0m -l host=1/core=4,walltime=2:00:00
+```
+
+<v-click>
+
+We must remember to load Spack here:
+
+```
+$ . spack/share/spack/setup-env.sh
+$ module load gcc/13
+$ spack env activate gysela-io && spack install
+```
+
+</v-click>
 
 
+---
+
+## Compilation errors
+
+If you get a compilation error for a specific Spack package, [please open an issue](https://github.com/spack/spack-packages/issues) about it.
+
+If the package has a maintainer, they will be notified about your issue.
+
+<image class="flex flex-col items-center">
+  <img width="500px" src="../issue.png" >
+  <strong>Posting a GitHub issue on <pre>spack/spack-packages</pre></strong>
+</image>
 
 
 ---
@@ -633,7 +675,7 @@ spack:
 $ spack concretize --force
 ```
 
-This forces Spack to produce more portable binaries (not specific to a micro-architecture).
+This helps Spack to produce more portable binaries (not specific to a micro-architecture).
 
 This allows to reuse binaries from buildcaches more often.
 
@@ -662,105 +704,64 @@ We can also use the `spack graph [spec]` command to view the entire DAG as a gra
 
 ## Building our Gysela app
 
-We build our app as usual, but from with the activated Spack environment:
+We build our application as usual, but from with the activated Spack environment:
 
 ```
 $ cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=external/gyselalibxx/toolchains/cpu.spack.gyselalibxx_env/toolchain.cmake
 $ cmake --build build -j 4
 ```
 
-<br/>
 
 ```cmake
-cmake_minimum_required(VERSION 3.16)
-project(MyProject LANGUAGES CXX)
+# gysela-mini-app_io/CMakeLists.txt
+cmake_minimum_required(VERSION 3.25)
+project(gysela-mini-app_io C CXX)
+add_subdirectory(external/gyselalibxx)
+```
 
-find_package(Kokkos REQUIRED)
-add_executable(myapp main.cpp)
-target_link_libraries(myapp PRIVATE Kokkos::kokkos)
+```cmake
+# gyselaxx/CMakeLists.txt
+project(gyselalibxx C CXX)
+
+find_package(Kokkos 4.4.1...<5 REQUIRED)
+find_package(KokkosKernels 4.5.1...<5 REQUIRED)
+...
 ```
 
 ---
 
-## Running our App
+## Running our Gysela app
 
-For development, if we used `kokkos ~cuda`, we can run it directly. For the GPU version, go into a GPU node:
+Time to launch our application:
 
-```ansi
-[0;90m# Interactive shell on a [0;33mCPU[0m partition[0m
-$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special \
-  -I -p [0;33mchiclet[0m -l /host=1,walltime=0:05:00
-
-[0;90m# Interactive shell on a [0;32mGPU[0m node[0m
-$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special \
-  -I -p [0;32mchifflot[0m -l /host=1,walltime=0:05:00
-
-[0;90m# Interactive shell on a [0;32mGPU[0m node with only 1 GPU[0m
-$ oarsub --project lab-2025-numpex-exadi-spack -t allowed=special
-  -I -p [0;32mchifflot[0m -l /host=1,walltime=0:05:00
+```
+$ ./launch_script.sh
 ```
 
+<div class="w-full flex flex-row justify-center">
 
----
+```mermaid {scale: 0.7}
+graph LR
+    A[1. Dask Scheduler] --> B[2. Dask Workers]
+    B --> C[3a. Analytics<br/>python3]
+    B --> D[3b. Simulation<br/>mpirun]
+    C --> E[4. Wait & Cleanup]
+    D --> E
+    
+    style A fill:#e1f5ff
+    style B fill:#e1f5ff
+    style C fill:#ffe1e1
+    style D fill:#ffe1e1
+    style E fill:#f0f0f0
+```
 
-## Compilation errors
-
-If you get a compilation error for a specific Spack package, [please open an issue](https://github.com/spack/spack-packages/issues) about it.
-
-If the package has a maintainer, they will be notified about your issue.
-
-<div class="flex flex-row justify-center justify-items-center gap-10 mt-10">
-  <img src="../issue.png">
 </div>
 
-
----
-
-## Recommended workflow
-
-For local development:
-- Start with a `spack.yaml`
-- Add you project dependencies.
-
-For advanced users:
-- Use Spack's official cache or setup a cache on CI/CD.
-- Package your application itself.
+> The simulation generates 5D particle distribution functions (gyrokinetic plasma physics). Analytics computes fluid moments (density, velocity, temperature) in-situ via Dask + Deisa.
 
 
----
-layout: center
----
+We can change Python or C++ sources, build again, and launch the simulation again.
 
-# Advanced topics
-
-
----
-src: ./slides/externals.md
----
-
----
-
-## Writing a package recipe
-
-- [Official documentation](https://spack-tutorial.readthedocs.io/en/latest/tutorial_packaging.html) on package recipes.
-- `spack create -n my-package`: Generate a new package recipe.
-
-```python
-class MyPackage(CMakePackage):
-  git = "file:///path/to/repo"  # or https://...
-
-  version("main", branch="main")
-
-  depends_on("mpi")
-  depends_on("blas")
-  depends_on("cuda")
-```
-
-```yaml
-spack:
-  specs:
-  - my-package ^cuda@11 ^mpich@4 +fortran ^openblas
-```
 
 ---
 
@@ -804,6 +805,56 @@ $ spack install  # 🔁
 
 
 
+---
+
+## Recommended workflows
+
+For local development:
+
+- Start with a Spack environment `spack.yaml`.
+- Add your project dependencies to it.
+- Build your application as usual.
+
+For more advanced users:
+
+- Write a Spack recipe for your application / library.
+- Use the `spack develop` to build it using only Spack commands.
+
+
+---
+layout: center
+---
+
+# Advanced topics
+
+
+---
+src: ./slides/externals.md
+---
+
+---
+
+## Writing a package recipe
+
+- [Official documentation](https://spack-tutorial.readthedocs.io/en/latest/tutorial_packaging.html) on package recipes.
+- `spack create -n my-package`: Generate a new package recipe.
+
+```python
+class MyPackage(CMakePackage):
+  git = "file:///path/to/repo"  # or https://...
+
+  version("main", branch="main")
+
+  depends_on("mpi")
+  depends_on("blas")
+  depends_on("cuda")
+```
+
+```yaml
+spack:
+  specs:
+  - my-package ^cuda@11 ^mpich@4 +fortran ^openblas
+```
 
 
 

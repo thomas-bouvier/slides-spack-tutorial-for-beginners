@@ -9,11 +9,7 @@ Note that this tutorial is part of the Numpex software integration strategy back
 ## TODO
 
 - Envoyer mail participants
-- Présentation Numpex
-- Test g5k
 - Migrer buildcache
-- Enlever variante couteuse
-- CUDA?
 
 ## Credits
 
