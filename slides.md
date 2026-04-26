@@ -586,12 +586,14 @@ $ spack env activate gysela-io && spack install
 
 If you get a compilation error for a specific Spack package, [please open an issue](https://github.com/spack/spack-packages/issues) about it.
 
-If the package has a maintainer, they will be notified about your issue.
+The maintainer of the package will be notified about your issue.
 
 <image class="flex flex-col items-center">
-  <img width="500px" src="../issue.png" >
-  <strong>Posting a GitHub issue on <pre>spack/spack-packages</pre></strong>
+  <img width="500px" src="./issue.png" >
+  <strong>Posting a GitHub issue</strong>
 </image>
+
+Once merged, the fix can be retrieved using `spack repo update`.
 
 
 ---
