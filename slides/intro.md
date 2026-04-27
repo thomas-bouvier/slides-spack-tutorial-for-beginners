@@ -12,6 +12,8 @@ Date/time: Tuesday 28th, April at 2 pm (~2h)
 
 > Note that this tutorial is part of the Numpex software integration strategy backed by the Exa-DI WP3 team. Our ambition is to have all Numpex-related libraries packaged with Spack, make Spack-based deployment part of every developer’s arsenal, and work with computing centers to make Spack-based user-level software deployment as frictionless as possible.
 
+Please follow along at: https://thomas-bouvier.github.io/slides-spack-tutorial-for-beginners
+
 ---
 layout: center
 ---

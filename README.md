@@ -8,9 +8,12 @@ Note that this tutorial is part of the Numpex software integration strategy back
 
 ## TODO
 
+- nouveaux comptes
 - Envoyer mail participants
 - Migrer buildcache
+- CUDA?
+- demo archi
 
 ## Credits
 
-Original slides by Fernando Ayats Llamas at [https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial](https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial).
+I reused a few slides by Fernando Ayats Llamas at [https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial](https://gitlab.inria.fr/numpex-pc5/wp3/spack-tutorial).

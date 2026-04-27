@@ -38,7 +38,7 @@ hideInToc: true
   <div class="flex flex-col items-start">
     <h1 class="font-black text-left">Spack Tutorial for Beginners</h1>
     <h3>NumPEx WP3 / WP4</h3>
-    <h4><u>Thomas Bouvier</u> with many slides from Fernando Ayats Llamas</h4>
+    <h4><u>Thomas Bouvier</u> with a few slides from Fernando Ayats Llamas</h4>
   </div>
 </div>
 
@@ -491,11 +491,7 @@ $ git clone --recursive https://github.com/thomas-bouvier/gysela-mini-app_io
 
 <v-click>
 
-The work has been done:
-
-```
-$ curl https://raw.githubusercontent.com/thomas-bouvier/my-spack-envs/refs/heads/main/generic/gysela-mini-app-io/spack.yaml -o ~/spack/var/spack/environments/gysela-io/spack.yaml
-```
+The work of writing the `spack.yaml` file has been done in the repository you just cloned.
 
 </v-click>
 
@@ -555,16 +551,14 @@ If you skip the concretization step `spack concretize`, `spack install` will con
 
 We are ready to run `spack install`. Where to do it?
 
-If depends on the computing center. <span v-mark.red="1">By default, you should compile on a compute node</span>.
+It depends on the computing center. <span v-mark.red="1">By default, you should compile on a compute node</span> (only 8 GB of RAM on Grid'5000 frontends).
 
 ```ansi
 [0;90m# Interactive shell on a [0;33mCPU[0m partition[0m
 $ oarsub --project lab-2026-numpex-spack-tutorial -t allowed=special \
   -I -p [0;33mchiclet[0m -l host=1/core=4,walltime=2:00:00
 
-[0;90m# Interactive shell on a [0;32mGPU[0m node[0m
-$ oarsub --project lab-2026-numpex-spack-tutorial -t allowed=special \
-  -I -p [0;32mchifflot[0m -l host=1/core=4,walltime=2:00:00
+# Use chifflot for a GPU node with host=1/gpu=1
 ```
 
 <v-click>
@@ -710,7 +704,7 @@ We build our application as usual, but from with the activated Spack environment
 
 ```
 $ cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=external/gyselalibxx/toolchains/cpu.spack.gyselalibxx_env/toolchain.cmake
-$ cmake --build build -j 4
+$ cmake --build build -j 4 -t gys_io
 ```
 
 
@@ -737,7 +731,7 @@ find_package(KokkosKernels 4.5.1...<5 REQUIRED)
 Time to launch our application:
 
 ```
-$ ./launch_script.sh
+$ export PYTHONPATH=~/gysela-mini-app_io/python:$PYTHONPATH && ./launch_script.sh
 ```
 
 <div class="w-full flex flex-row justify-center">
@@ -767,13 +761,41 @@ We can change Python or C++ sources, build again, and launch the simulation agai
 
 ---
 
-## Developing a package 1/2
+## Quick look at the Gysela output
 
-The `spack develop` command
+You can retrieve the generated images on your laptop:
 
 ```
-$ spack develop --path /path/to/my/sources my-package@main
-$ spack concretize --force
+$ rsync -r lille.g5k:gysela-mini-app_io/gysela_plots/ .
+```
+
+Have a look at the density at each iteration:
+
+<div class="grid grid-cols-5 gap-2">
+  <img src="./gysela_output/density/iter_0.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_1.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_2.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_3.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_4.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_5.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_6.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_7.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_8.jpg" class="w-full h-24 object-cover rounded" />
+  <img src="./gysela_output/density/iter_9.jpg" class="w-full h-24 object-cover rounded" />
+</div>
+
+
+
+
+
+---
+
+## Developing a package 1/2
+
+What if we need to edit a package already in Spack like `py-deisa-dask`? The `spack develop` command marks the given spec as a 'develop' package:
+
+```
+$ spack develop py-deisa-dask
 ```
 
 just updates the `spack.yaml` file:
@@ -781,28 +803,36 @@ just updates the `spack.yaml` file:
 ```yaml
 spack:
   specs:
-  - my-package ^cuda@11 ^mpich@4 +fortran ^openblas
+  - ...
+  - py-deisa-dask
   develop:
-    my-package:
-      spec: my-package@=main
-      path: /path/to/my/sources
+    py-deisa-dask:
+      spec: py-deisa-dask@=0.3.0
 ```
+
+An existing path can be provided with `spack develop --path <path> <spec>`.
 
 ---
 
 ## Developing a package 2/2
 
-After concretization, you will see a "reserved" variant <span class="color-blue">dev_path=</span>.
+Looking at the concretized specs using `spack spec`, you will see a "reserved" variant <span class="color-blue">dev_path=</span>.
 
-<code>
-my-package <span class="color-cyan">@main</span> <span class="color-blue">%gcc@13.2.0 dev_path=/path/to/my/sources</span>
-</code>
+```
+-   py-deisa-dask@0.3.0 build_system=python_pip dev_path=/home/tbouvier/spack/var/spack/environments/gysela-io/py-deisa-dask platform=linux os=debian11 target=x86_64 
+[+]      ^py-deisa-core@0.1.0 build_system=python_pip platform=linux os=debian11 target=x86_64 
+```
+
+Let's modify a source file:
+
+```
+$ vim ~/spack/var/spack/environments/gysela-io/py-deisa-dask/src/deisa/dask/deisa.py
+```
 
 and `spack install` will automatically do an overwrite install if any of the source files change (similarly to `make install`).
 
 ```
-$ touch /path/to/my/sources/my-package.c
-$ spack install  # 🔁
+$ spack install  # This will build the local copy
 ```
 
 
@@ -820,7 +850,7 @@ For local development:
 For more advanced users:
 
 - Write a Spack recipe for your application / library.
-- Use the `spack develop` to build it using only Spack commands.
+- Use the `spack develop` to build it using Spack commands only.
 
 
 ---
