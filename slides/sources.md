@@ -1,6 +1,6 @@
 # Thank you for participating! Any questions?
 
-- [NumPEx Exa-DI Tutorials](https://numpex-pc5.gitlabpages.inria.fr/tutorials/)
+- [NumPEx Exa-DI Tutorials](https://numpex-pc5.gitlabpages.inria.fr/tutorials/): this tutorial will be added in the coming days.
 - [PC5 WP3 Mailing list](mailto:numpex-pc5-wp3@inria.fr)
 - [PC5 Slack #packaging](https://numpex.slack.com/archives/C07UT051H7Y)
 - [Spack Slack Channel](https://spackpm.slack.com/)

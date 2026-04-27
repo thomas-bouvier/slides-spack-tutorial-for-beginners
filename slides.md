@@ -110,7 +110,7 @@ To install Spack, make sure you have Python & Git. Then, we must clone the repo 
 [0;90m# ==> Clone Spack[0m
 $ git clone --depth=100 https://github.com/spack/spack.git ~/spack
 $ cd spack
-$ git checkout 7e86478 [0;90m# Locked Spack commit for the tutorial[0m
+$ git checkout af1edd4 [0;90m# Locked Spack commit for the tutorial[0m
 $ cd ~
 
 [0;90m# ==> Activate Spack[0m
@@ -118,7 +118,7 @@ $ . spack/share/spack/setup-env.sh
 [0;90m# For Fish Shell: source spack/share/spack/setup-env.fish[0m
 
 $ spack --version
-1.2.0.dev0 (7e864787bd15a516314d86002ce1cbabde7cbbe9)
+1.2.0.dev0 (af1edd44f13ed3fb53c7f647c7e25280f8bc817e)
 ```
 
 The Spack executable and the versions for all packages are located in the Spack folder `~/spack`.
@@ -294,8 +294,7 @@ $ spack spec kokkos@5
  -                   ^perl@5.42.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
  -                       ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=debian11 target=x86_64 %c,cxx=gcc@13.2.0
  -                       ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
- -                       ^gdbm@1.26 build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
- -                           ^readline@8.3 build_system=autotools patches:=21f0a03 platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ ...
 ```
 
 The concretization is now successfull for `kokkos@5`.
@@ -452,22 +451,22 @@ We could build a CUDA-enabled kokkos instead:
 
 
 ```ansi{1,2,9}
-$ spack add kokkos +cuda cuda_arch=120
-[0;90m - [0m  kokkos[0;36m@4.5.01[0m[0;94m~aggressive_vectorization~alloc_async~cmake_lang~compiler_warnings+complex_align+cuda~cuda_constexpr~cuda_lambda~cuda_ldg_intrinsic~cuda_relocatable_device_code~cuda_uvm~debug~debug_bounds_check~debug_dualview_modify_check~deprecated_code~examples~hip_relocatable_device_code~hpx~hpx_async_dispatch~hwloc~ipo~memkind~numactl~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=120 cxxstd=17 generator=make intel_gpu_arch=none[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^cmake[0;36m@3.31.6[0m[0;94m~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^curl[0;36m@8.11.1[0m[0;94m~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs=shared,static tls=openssl[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+$ spack add kokkos +cuda cuda_arch=60
+ -   kokkos@5.1.0~aggressive_vectorization~alloc_async~cmake_lang+complex_align+cuda~cuda_constexpr~cuda_relocatable_device_code~debug~debug_bounds_check+deprecated_code~hip_relocatable_device_code~hpx~hwloc~ipo~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=60 cxxstd=20 generator=make intel_gpu_arch=none platform=linux os=debian11 target=x86_64 %cxx=gcc@13.2.0
+ -       ^cmake@3.30.9~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release patches:=dbc3892,fdea723 platform=linux os=debian11 target=x86_64 %c,cxx=gcc@10.2.1
+ -           ^compiler-wrapper@1.0 build_system=generic platform=linux os=debian11 target=x86_64 
+[e]          ^gcc@10.2.1~binutils+bootstrap~graphite~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=debian11 target=x86_64 
 ...
-[0;32m[+][0m          ^ncurses[0;36m@6.5[0m[0;94m~symlinks+termlib abi=none build_system=autotools patches=7a351bc[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^zlib-ng[0;36m@2.2.3[0m[0;94m+compat+new_strategies+opt+pic+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m      ^compiler-wrapper[0;36m@1.0[0m[0;94m build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;90m - [0m      ^cuda[0;36m@12.8.0[0m[0;94m~allow-unsupported-compilers~dev build_system=generic[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m          ^libxml2[0;36m@2.13.5[0m[0;94m~http+pic~python+shared build_system=autotools[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^libiconv[0;36m@1.17[0m[0;94m build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[+][0m              ^xz[0;36m@5.6.3[0m[0;94m~pic build_system=autotools libs=shared,static[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
-[0;32m[e][0m      ^gcc[0;36m@13.3.0[0m[0;94m~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages='c,c++,fortran'[0m[0;35m arch=linux-ubuntu24.04-icelake[0m
+ -       ^cuda@12.9.1~allow-unsupported-compilers~dev build_system=generic platform=linux os=debian11 target=x86_64 
+ -           ^coreutils@9.10~gprefix build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -           ^gzip@1.14 build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@13.2.0
+ -           ^libxml2@2.13.5~http+pic~python+shared build_system=autotools platform=linux os=debian11 target=x86_64 %c=gcc@10.2.1
+ -               ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=debian11 target=x86_64 %c=gcc@10.2.1
+ -               ^xz@5.6.3~pic build_system=autotools libs:=shared,static platform=linux os=debian11 target=x86_64 %c=gcc@10.2.1
 ...
 ```
 
+Nodes `chifflot-[1-6]` are equipped with 2 x Tesla P100 GPUs (compute capability 6.0).
 
 
 
@@ -790,7 +789,7 @@ Have a look at the density at each iteration:
 
 ---
 
-## Developing a package 1/2
+## Developing a package 1/3
 
 What if we need to edit a package already in Spack like `py-deisa-dask`? The `spack develop` command marks the given spec as a 'develop' package:
 
@@ -814,7 +813,7 @@ An existing path can be provided with `spack develop --path <path> <spec>`.
 
 ---
 
-## Developing a package 2/2
+## Developing a package 2/3
 
 Looking at the concretized specs using `spack spec`, you will see a "reserved" variant <span class="color-blue">dev_path=</span>.
 
@@ -823,19 +822,37 @@ Looking at the concretized specs using `spack spec`, you will see a "reserved" v
 [+]      ^py-deisa-core@0.1.0 build_system=python_pip platform=linux os=debian11 target=x86_64 
 ```
 
-Let's modify a source file:
+Let's modify a source file (adding a simple `print()` statement):
 
 ```
 $ vim ~/spack/var/spack/environments/gysela-io/py-deisa-dask/src/deisa/dask/deisa.py
 ```
 
-and `spack install` will automatically do an overwrite install if any of the source files change (similarly to `make install`).
+Now, `spack install` will automatically do an overwrite install if any of the local source files changes.
+
+
+---
+
+## We need a fix first :( 3/3
+
+Currently, specs marked as 'develop' interfere with the buildcache. We do not want this.
+
+The following patch is required for our workflow and <span v-mark.red="1">will be merged very soon in upstream Spack</span>.
+
+
+```
+$ git remote add fork https://github.com/thomas-bouvier/spack
+$ git fetch fork
+$ git stash
+$ git checkout feat/filter-develop-deps-from-cache
+$ git stash apply
+```
+
+Ok, we can just `spack install` to build the local copy of `py-deisa-dask`:
 
 ```
 $ spack install  # This will build the local copy
 ```
-
-
 
 ---
 
