@@ -88,14 +88,16 @@ layout: center
 
   - Ease difficulty in building and developing apps and libraries.
   - Portable solution from a laptop to the supercomputer.
-  - CI/CD ready.
 
-  **System administrators**
-  - Ease package administration and testing.
+  <p>
+    <strong v-mark.red="-1">System administrators</strong>
+  </p>
+
+  - Ease package administration and testing on supercomputers.
   - Align interests of developers and sysadmins.
 
   **Application users**
-  - Provide *turn-key* solutions for deployments.
+  - Provide ready-to-use solutions for deployments.
   - Fearless migrations between machines and updates.
 
 
@@ -142,7 +144,7 @@ Package managers are very good at managing your dependencies for you.
 - ✅ Easy installation of dependencies
 - ✅ Reproducible stack of software, without fragile scripts
 - ✅ Adaptable to different platforms
-- ✅ CI/CD Ready
+- ✅ Can be used to generate modules
 
 <div class="flex flex-row w-full justify-center justify-items-center gap-10 mt-10">
   <img src="https://guix.gnu.org/themes/initial/img/Guix.png">

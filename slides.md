@@ -829,7 +829,7 @@ Now, `spack install` will automatically do an overwrite install if any of the lo
 
 ---
 
-## We need a fix first :( 3/3
+## We need a patch first :( 3/3
 
 Currently, specs marked as 'develop' interfere with the buildcache. We do not want this.
 

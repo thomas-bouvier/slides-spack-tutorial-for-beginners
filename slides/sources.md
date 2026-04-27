@@ -5,11 +5,12 @@
 - [PC5 Slack #packaging](https://numpex.slack.com/archives/C07UT051H7Y)
 - [Spack Slack Channel](https://spackpm.slack.com/)
 
-<br/>
-
+<br>
 
 - The official [Tutorial: Spack 101](https://spack-tutorial.readthedocs.io/en/latest)
 - [Spack Documentation](https://spack.readthedocs.io/en/latest)
-- https://spack.github.io/spack-cscs2024
+- The current presentation is hosted at  [https://thomas-bouvier.github.io/slides-spack-tutorial-for-beginners](https://thomas-bouvier.github.io/slides-spack-tutorial-for-beginners)
 
-- This [presentation](https://thomas-bouvier.github.io/slides-spack-tutorial-for-beginners)
+<br>
+
+Many thanks to the [Gysela](https://gyselax.github.io/) team and to Ivan Lucas for the I/O mini app
