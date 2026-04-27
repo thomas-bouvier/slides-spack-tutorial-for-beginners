@@ -199,11 +199,8 @@ kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggress
 
 Given a set of requirements:
 
-- System is a <code class="color-pink">debian11-x86_64</code>
-- The compiler provided to us is `%gcc@10`
-- Say we want:
-  - Package <code>A<span class="color-cyan">@1.0:</span><span class="color-blue">+mpi</span></code>
-  - Package <code>B<span class="color-blue">+cuda</span></code> which requires <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+cuda</span></code>
+- Package <code>A<span class="color-cyan">@1.0:</span><span class="color-blue">+mpi</span></code>
+- Package <code>B<span class="color-blue">+cuda</span></code> which requires <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+cuda</span></code>
 
 **... Concretization**
 
@@ -405,12 +402,12 @@ hideInToc: true
 
 `spack config edit` allows to open the environment file `spack.yaml`.
 
-It looks as follows:
-
 ```yaml
 # ~/spack/var/spack/environments/gysela-io/spack.yaml
 spack:
-  specs: []
+  specs:  # These are root specs
+  - A
+  - B
   view: true
   concretizer:
     unify: true
@@ -420,7 +417,7 @@ spack:
 
 Less importantly:
 - `view`: Use a filesystem view of the `install_tree` directory.
-- `concretizer:unify`: Any package in the environment corresponds to a single concrete spec.
+- `concretizer:unify`: All packages are reused across root specs' dependencies.
 
 ---
 
@@ -449,9 +446,8 @@ spack:
 
 We could build a CUDA-enabled kokkos instead:
 
-
-```ansi{1,2,9}
-$ spack add kokkos +cuda cuda_arch=60
+```ansi{1,2,7}
+$ spack add kokkos +wrapper +cuda cuda_arch=60
  -   kokkos@5.1.0~aggressive_vectorization~alloc_async~cmake_lang+complex_align+cuda~cuda_constexpr~cuda_relocatable_device_code~debug~debug_bounds_check+deprecated_code~hip_relocatable_device_code~hpx~hwloc~ipo~openmp~openmptarget~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=60 cxxstd=20 generator=make intel_gpu_arch=none platform=linux os=debian11 target=x86_64 %cxx=gcc@13.2.0
  -       ^cmake@3.30.9~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release patches:=dbc3892,fdea723 platform=linux os=debian11 target=x86_64 %c,cxx=gcc@10.2.1
  -           ^compiler-wrapper@1.0 build_system=generic platform=linux os=debian11 target=x86_64 
@@ -699,7 +695,7 @@ We can also use the `spack graph [spec]` command to view the entire DAG as a gra
 
 ## Building our Gysela app
 
-We build our application as usual, but from with the activated Spack environment:
+We build our application as usual, but from within the activated Spack environment:
 
 ```
 $ cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=external/gyselalibxx/toolchains/cpu.spack.gyselalibxx_env/toolchain.cmake
