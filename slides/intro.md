@@ -55,13 +55,18 @@ layout: center
 <div class="grid grid-cols-[70%_30%] gap-6">
   <div>
 
-  - Gyselalib builds on top of domain expert libraries
+  - <a href="https://gyselax.github.io/">GyselaX</a> builds on top of domain expert libraries
 
     - With heterogeneous languages: CUDA, HIP, SYCL, C++, C, Fortran, Python
     - Libraries have many compile options
-    - Some are usually available on clusters but not always built with required options
+    - Some are usually available on clusters (`module load`) but not always built with required options
     - Some are very unlikely available
+
+  <v-click>
+
   - Non exhaustive list of direct dependencies: `DDC`, `Eigen`, `Koliop`, `Kokkos`, `kokkos-fft`, `Kokkos Kernels`, `Ginkgo`, `MPI`, `PDI`, `NetCDF`, `HDF5`, `Dask`, `Xarray`, `h5py`, `matplotlib`...
+
+  </v-click>
 
   </div>
 
@@ -77,7 +82,7 @@ layout: center
 
 ---
 
-## Our target as NumPEx PC5
+## Our target as NumPEx Exa-DI
 
 <div class="grid grid-cols-[1fr_max-content]">
   <div>
@@ -97,7 +102,7 @@ layout: center
   - Align interests of developers and sysadmins.
 
   **Application users**
-  - Provide ready-to-use solutions for deployments.
+  - Provide ready-to-use solutions for deployments (modules can be generated more easily).
   - Fearless migrations between machines and updates.
 
 

@@ -37,7 +37,7 @@ hideInToc: true
   <img src="./Logo_France_2030.svg" width=150 class="bg-white rounded-full">
   <div class="flex flex-col items-start">
     <h1 class="font-black text-left">Spack Tutorial for Beginners</h1>
-    <h3>NumPEx WP3 / WP4</h3>
+    <h3><a href="https://numpex.org/">NumPEx</a> <a Exa-DI WP3</h3>
     <h4><u>Thomas Bouvier</u> with a few slides from Fernando Ayats Llamas</h4>
   </div>
 </div>
@@ -59,7 +59,8 @@ layout: center
 
 - SSH into a computer center -- we use Grid'5000 in this tutorial.
 - Install Spack, discover some of its commands.
-- Install and run a Kokkos application, and run with GPU support.
+- Install the Kokkos library.
+- Install and run a Gysela mini-app relying on Kokkos, and run it (optionally with GPU support).
 - Time for questions and discussion.
 
 
@@ -73,8 +74,8 @@ These are some of the key insights to understand how Spack works:
 - 📦 Install Spack by cloning the [repo](https:://github.com/spack/spack). Multiple installations allowed.
 - ✅ Activate Spack to run commands.
 - 📌 Available package versions depend on your Spack clone.
-- 🌍 Write a list of "package specs" to be installed in your Spack environment.
 - 🤝 Integrate system packages with "externals".
+- 🌍 Write a list of "package specs" to be installed in your Spack environment.
 - 🎛️ Package specs allow to pass options like <code class="color-blue">+cuda</code>.
 
 ---
@@ -166,7 +167,7 @@ $ spack spec kokkos
 ...
 ```
 
-Instead of package names, Spack uses **package specs**: a spec is like a name, but it has a version, compiler, architecture, and build options associated with it.
+Instead of package names, Spack uses **package specs**: a concrete spec is like a name, but it has a version, compiler, architecture, and build options associated with it.
 
 <code>
 kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggressive_vectorization ~atomics_bypass</span> ...
@@ -179,7 +180,7 @@ Going from a package name to such a concrete spec is called **concretizing**.
 Spec documentation: https://spack.readthedocs.io/en/latest/package_fundamentals.html#specs-dependencies
 
 <code>
-kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggressive_vectorization ~atomics_bypass</span> ...
+kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggressive_vectorization</span> <span class="color-pink">target=x86_64 %c,cxx=gcc@10.2.1</span>
 </code>
 
 - <code class="color-cyan">@4.7.03</code>: [Version specifier](https://spack.readthedocs.io/en/latest/basic_usage.html#version-specifier).
@@ -197,14 +198,16 @@ kokkos <span class="color-cyan">@4.7.03</span> <span class="color-blue">~aggress
 
 ## Spack's Concretizer (= a Dependency Solver)
 
-Given a set of requirements:
+Given a set of requirements, in this case <span v-mark.red="0">two root specs</span>:
 
 - Package <code>A<span class="color-cyan">@1.0:</span><span class="color-blue">+mpi</span></code>
 - Package <code>B<span class="color-blue">+cuda</span></code> which requires <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+cuda</span></code>
 
 **... Concretization**
 
-Result in what you see from `spack spec`, the actual dependency tree. <code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+mpi+cuda</span></code> will be installed.
+Result is what you see from `spack spec`, the actual dependency tree of concrete specs.
+
+<code>A<span class="color-cyan">@1.2:</span><span class="color-blue">+mpi+cuda</span></code> will be installed.
 
 For a given set of specs, the concretizer solves all constraints (SAT problem) to generate a DAG of concrete dependencies.
 
@@ -311,7 +314,7 @@ Notice the <code class="color-pink">`target=x86_64 %c=gcc@13.2.0`</code> in the 
 
 `spack config blame` is useful to understand the provenance of each config attribute.
 
-The following command will set <span v-mark.red="1">where packages will be built</span>.
+The following command will set <span v-mark.red="1">where packages will be built. Important on Grid'5000.</span>
 
 ```
 $ spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
@@ -362,7 +365,7 @@ $ spack load kokkos
 ...but let's use <span v-mark.red="1">environments</span> instead!
 
 
-- 📦 Multiple root packages -- run a single install command for all the packages you need.
+- 📦 Multiple root specs -- run a single install command for all the packages you need.
 - 👥 Shareable / versionable -- share the environment file `spack.yaml` with your colleagues.
 - 🔒 Isolated -- environments won't conflict between each other.
 
@@ -472,21 +475,27 @@ Nodes `chifflot-[1-6]` are equipped with 2 x Tesla P100 GPUs (compute capability
 
 Say I am developing a C++ app in the Gysela system:
 
-- Demonstrating I/O operations ;
-- Testing the CPU performance scaling for 5D particle distribution functions ;
+- Demonstrating I/O operations.
+- Testing the CPU performance scaling for 5D particle distribution functions.
 
 ```
+$ cd ~
 $ git clone --recursive https://github.com/thomas-bouvier/gysela-mini-app_io
 ```
 
 **... the package for my app is not in Spack yet**
 
 - Actually, `py-gysela` is not even available in Spack (https://packages.spack.io/)
-- We have to declare all dependencies appearing in our sources in a Spack environment.
+- We have to declare all dependencies appearing in our app in a `spack.yaml` file.
 
 <v-click>
 
 The work of writing the `spack.yaml` file has been done in the repository you just cloned.
+
+```
+$ rm ~/spack/var/spack/environments/gysela-io/spack.yaml
+$ cp ~/gysela-mini-app_io/spack.yaml ~/spack/var/spack/environments/gysela-io/
+```
 
 </v-click>
 
@@ -575,7 +584,7 @@ $ spack env activate gysela-io && spack install
 
 If you get a compilation error for a specific Spack package, [please open an issue](https://github.com/spack/spack-packages/issues) about it.
 
-The maintainer of the package will be notified about your issue.
+The maintainer of the [package recipe](https://github.com/spack/spack-packages/blob/develop/repos/spack_repo/builtin/packages/kokkos/package.py) will be notified about your issue.
 
 <image class="flex flex-col items-center">
   <img width="500px" src="./issue.png" >
