@@ -37,7 +37,7 @@ hideInToc: true
   <img src="./Logo_France_2030.svg" width=150 class="bg-white rounded-full">
   <div class="flex flex-col items-start">
     <h1 class="font-black text-left">Spack Tutorial for Beginners</h1>
-    <h3><a href="https://numpex.org/">NumPEx</a> <a Exa-DI WP3</h3>
+    <h3><a href="https://numpex.org/">NumPEx</a> <a href="https://numpex.org/exadi-development-and-integration/">Exa-DI WP3</a></h3>
     <h4><u>Thomas Bouvier</u> with a few slides from Fernando Ayats Llamas</h4>
   </div>
 </div>
