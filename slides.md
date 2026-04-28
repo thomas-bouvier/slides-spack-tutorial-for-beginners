@@ -742,10 +742,10 @@ $ export PYTHONPATH=~/gysela-mini-app_io/python:$PYTHONPATH && ./launch_script.s
 
 ```mermaid {scale: 0.7}
 graph LR
-    A[1. Dask Scheduler] --> B[2. Dask Workers]
-    B --> C[3a. Analytics<br/>python3]
-    B --> D[3b. Simulation<br/>mpirun]
-    C --> E[4. Wait & Cleanup]
+    A["Dask Scheduler"] --> B["Dask Workers"]
+    B --> C["Analytics - python3"]
+    B --> D["Simulation - mpirun"]
+    C --> E["Wait and Cleanup"]
     D --> E
     
     style A fill:#e1f5ff
