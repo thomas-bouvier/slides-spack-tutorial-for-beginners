@@ -4,8 +4,7 @@
     "schema-version": "1.11.0",
     "install": {
       "nodejs": {
-        "pkg-path": "nodejs",
-        "outputs": "all"
+        "pkg-path": "nodejs"
       }
     },
     "hook": {
@@ -75,37 +74,6 @@
         "out": "/nix/store/rpyb0275h916mxx8a0cm7yavm4qbr4j9-nodejs-24.13.0"
       },
       "system": "aarch64-linux",
-      "group": "toplevel",
-      "priority": 5
-    },
-    {
-      "attr_path": "nodejs",
-      "broken": false,
-      "derivation": "/nix/store/xgryfaiwfymf8ndij80ssly7q2kdq8y1-nodejs-24.13.0.drv",
-      "description": "Event-driven I/O framework for the V8 JavaScript engine",
-      "install_id": "nodejs",
-      "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=a82ccc39b39b621151d6732718e3e250109076fa",
-      "name": "nodejs-24.13.0",
-      "pname": "nodejs",
-      "rev": "a82ccc39b39b621151d6732718e3e250109076fa",
-      "rev_count": 945868,
-      "rev_date": "2026-02-13T18:55:12Z",
-      "scrape_date": "2026-02-15T05:46:09.817265Z",
-      "stabilities": [
-        "unstable"
-      ],
-      "unfree": false,
-      "version": "24.13.0",
-      "outputs_to_install": [
-        "out"
-      ],
-      "outputs": {
-        "dev": "/nix/store/rp55bch0hqxynmxnh7q5bs586kp0dib6-nodejs-24.13.0-dev",
-        "libv8": "/nix/store/dvl504xzwklpfjngdnn6kcpriklwsf6l-nodejs-24.13.0-libv8",
-        "out": "/nix/store/xhp1pnnq7hski7hwg36vw7kpxmg56khh-nodejs-24.13.0"
-      },
-      "system": "x86_64-darwin",
       "group": "toplevel",
       "priority": 5
     },
